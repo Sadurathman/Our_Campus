@@ -3,6 +3,8 @@ import {connect} from 'react-redux';
 
 import {signIn, signOut} from '../actions/userActions';
 
+const domain = "window.gapi.auth2.getAuthInstance().currentUser.get().getHostedDomain()";
+
 class GoogleAuth extends React.Component{
 
     componentDidMount(){
