@@ -44,6 +44,7 @@ const userSchema = mongoose.Schema(
     joinedEvents:[{type: mongoose.Schema.Types.ObjectId, ref: "Event"}],
     hostedEvents:[{type: mongoose.Schema.Types.ObjectId, ref: "Event"}],
     posts:[{type: mongoose.Schema.Types.ObjectId, ref: "Post"}],
+    home:[{type: mongoose.Schema.Types.ObjectId, ref: "Post"}],
     clubs:[{type: mongoose.Schema.Types.ObjectId, ref: "Club"}],
   },
   {
