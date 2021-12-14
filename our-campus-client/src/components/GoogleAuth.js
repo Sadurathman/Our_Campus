@@ -3,7 +3,8 @@ import {connect} from 'react-redux';
 
 import {signIn, signOut} from '../actions/userActions';
 
-const domain = "window.gapi.auth2.getAuthInstance().currentUser.get().getHostedDomain()";
+// const domain = "window.gapi.auth2.getAuthInstance().currentUser.get().getHostedDomain()";
+const base =  "window.gapi.auth2.getAuthInstance().currentUser.get();";
 
 class GoogleAuth extends React.Component{
 
@@ -19,8 +20,8 @@ class GoogleAuth extends React.Component{
             })
         });
     }
-
-
+    
+    
     onAuthChange = (isSignedIn) =>{
         if(isSignedIn){
             this.props.signIn(this.auth.currentUser.get().getId());

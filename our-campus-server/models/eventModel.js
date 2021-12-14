@@ -14,6 +14,10 @@ const eventSchema = mongoose.Schema(
       type: String,
       required: true,
     },
+    numComments:{
+      type: Number,
+      required: true
+    },
     admins:[{type: mongoose.Schema.Types.ObjectId, required: true, ref: "User"}],
     enrolled:[{type: mongoose.Schema.Types.ObjectId, required: true, ref: "User"}],
   },

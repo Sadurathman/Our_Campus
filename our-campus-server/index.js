@@ -1,8 +1,16 @@
 import path from "path";
 import express from "express";
 import morgan from "morgan";
+import dotenv from "dotenv";
 
+import connectDB from "./config/db.js";
 import userRoutes from "./routes/userRoutes.js";
+import eventRoutes from "./routes/eventRoutes.js";
+import postRoutes from "./routes/postRoutes.js";
+
+dotenv.config();
+
+connectDB();
 
 const app = express();
 
@@ -13,6 +21,8 @@ if (process.env.NODE_ENV === "development") {
 app.use(express.json());
 
 app.use("/users", userRoutes);
+app.use("/events", eventRoutes);
+app.use("/posts", postRoutes);
 
 const __dirname = path.resolve();
 app.use("/uploads", express.static(path.join(__dirname, "/uploads")));

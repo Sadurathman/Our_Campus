@@ -3,7 +3,7 @@ import User from "../models/userModel.js";
 import generateToken from "../utils/generateTokens.js";
 
 //@desc     Auth user & get token
-//@route    POST /api/users/login
+//@route    POST /users/login
 //@access   Public
 const authUser = asyncHandler(async (req, res) => {
   const { username } = req.body;
@@ -41,7 +41,7 @@ const authUser = asyncHandler(async (req, res) => {
 });
 
 //@desc     Register  New user
-//@route    POST /api/users
+//@route    POST /users
 //@access   Public
 const registerUser = asyncHandler(async (req, res) => {
   const { name, username, userType} = req.body;
@@ -56,7 +56,7 @@ const registerUser = asyncHandler(async (req, res) => {
     name,
     username,
     userType,
-    dp: "",
+    dp,
     tagline: "",
     about: "",
     rating: 0,
@@ -107,7 +107,7 @@ const registerUser = asyncHandler(async (req, res) => {
 });
 
 //@desc     Get user profile
-//@route    GET /api/users/profile
+//@route    GET /users/profile
 //@access   Private
 const getUserProfile = asyncHandler(async (req, res) => {
   const user = await User.findById(req.user._id);
@@ -143,7 +143,7 @@ const getUserProfile = asyncHandler(async (req, res) => {
 });
 
 //@desc     Update user profile
-//@route    PUT /api/users/profile
+//@route    PUT /users/profile
 //@access   Private
 const updateUserProfile = asyncHandler(async (req, res) => {
   const user = await User.findById(req.user._id);
@@ -203,7 +203,7 @@ const updateUserProfile = asyncHandler(async (req, res) => {
 });
 
 //@desc     Get all users
-//@route    GET /api/users
+//@route    GET /users
 //@access   Private/Admin
 const getUsers = asyncHandler(async (req, res) => {
   const users = await User.find({});
@@ -211,7 +211,7 @@ const getUsers = asyncHandler(async (req, res) => {
 });
 
 //@desc     Delete user
-//@route    DELETE /api/users/:id
+//@route    DELETE /users/:id
 //@access   Private/Admin
 const deleteUser = asyncHandler(async (req, res) => {
   const user = await User.findById(req.params.id);
@@ -224,8 +224,8 @@ const deleteUser = asyncHandler(async (req, res) => {
   }
 });
 
-//@desc     Get all users
-//@route    GET /api/users
+//@desc     Get user by id
+//@route    GET /users/:id
 //@access   Private/Admin
 const getUserById = asyncHandler(async (req, res) => {
   const user = await User.findById(req.params.id);
@@ -238,7 +238,7 @@ const getUserById = asyncHandler(async (req, res) => {
 });
 
 //@desc     Update user
-//@route    PUT /api/users/:id
+//@route    PUT /users/:id
 //@access   Private/admin
 const updateUser = asyncHandler(async (req, res) => {
   const user = await User.findById(req.params.id);
