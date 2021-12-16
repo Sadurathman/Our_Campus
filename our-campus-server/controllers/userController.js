@@ -1,15 +1,19 @@
 import asyncHandler from "express-async-handler";
 import User from "../models/userModel.js";
 import generateToken from "../utils/generateTokens.js";
+import {getPostUsingId} from "./postController.js";
 
 //@desc     Auth user & get token
 //@route    POST /users/login
 //@access   Public
 const authUser = asyncHandler(async (req, res) => {
   const { username } = req.body;
-  const user = await User.findOne({ username });
-
+  const user = await User.findOne().where('username').equals(username).exec();
+  
   if (user) {
+    const home = await getPostUsingId(user.home);
+    const posts = await getPostUsingId(user.posts);
+
     res.json({
       _id: user._id,
       username: user.username,
@@ -29,8 +33,8 @@ const authUser = asyncHandler(async (req, res) => {
       suggestions: user.suggestions,
       joinedEvents: user.joinedEvents,
       hostedEvents: user.hostedEvents,
-      posts: user.posts,
-      home: user.home,
+      posts,
+      home,
       clubs: user.clubs,
       token: generateToken(user._id),
     });
@@ -48,31 +52,31 @@ const registerUser = asyncHandler(async (req, res) => {
   const userExsists = await User.findOne({ username });
 
   if (userExsists) {
+    // authUser(req, res);
     res.status(400);
     throw new Error("User already exists");
-  }
-
+  }else{
   const user = await User.create({
     name,
     username,
     userType,
-    dp,
-    tagline: "",
-    about: "",
+    dp:"/images/default.jpg",
+    // tagline: "tagline",
+    // about: "about",
     rating: 0,
     respect: 0,
-    skills: [],
-    hobbies: [],
-    followers: [],
-    following: [],
-    requests: [],
-    requested: [],
-    suggestions: [],
-    joinedEvents: [],
-    hostedEvents: [],
-    posts: [],
-    home: [],
-    clubs: [],
+    // skills: [],
+    // hobbies: [],
+    // followers: [],
+    // following: [],
+    // requests: [],
+    // requested: [],
+    // suggestions: [],
+    // joinedEvents: [],
+    // hostedEvents: [],
+    // posts: [],
+    // home: [],
+    // clubs: [],
   });
 
   if (user) {
@@ -104,6 +108,7 @@ const registerUser = asyncHandler(async (req, res) => {
     res.status(404);
     throw new Error("Invalid user Data");
   }
+}
 });
 
 //@desc     Get user profile
@@ -146,7 +151,8 @@ const getUserProfile = asyncHandler(async (req, res) => {
 //@route    PUT /users/profile
 //@access   Private
 const updateUserProfile = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.user._id);
+  console.log(req.body);
+  const user = await User.findById(req.body._id);
 
   if (user) {
       user.username = req.body.username || user.username,
@@ -296,7 +302,48 @@ const updateUser = asyncHandler(async (req, res) => {
   }
 });
 
+const requestUser = asyncHandler(async (req, res) => {
+  const username = req.username;
+  const friendName = req.params.id;
+
+  const user = await User.findOne({username});
+  const friend = await User.findById({friendName});
+
+  if(user && friend){
+    user.requested.push(friend._id);
+    friend.requests.push(user._id);
+    await user.save();
+    await friend.save();
+    res.status(201).json(user);
+  }else{
+    res.status(404);
+    throw new Error("User not found");
+  }
+});
+
+const acceptUser = asyncHandler(async (req, res) => {
+  const username = req.username;
+  const friendName = req.params.id;
+
+  const user = await User.findOne({username});
+  const friend = await User.findById({friendName});
+
+  if(user && friend){
+    user.requested.remove(friend._id);
+    user.following.remove(friend._id);
+    friend.requests.remove(user._id);
+    friend.followers.remove(user._id);
+    await user.save();
+    await friend.save();
+    res.status(201).json(user);
+  }else{
+    res.status(404);
+    throw new Error("User not found");
+  }
+});
+
 export {
+  requestUser,
   getUserById,
   updateUser,
   registerUser,

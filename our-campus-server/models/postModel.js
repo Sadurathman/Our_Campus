@@ -18,9 +18,12 @@ const postSchema = mongoose.Schema(
       type: String,
       required: true,
     },
-    caption:{
+    dp:{
       type: String,
       required: true,
+    },
+    caption:{
+      type: String,
     },
     numComments:{
       type:Number,

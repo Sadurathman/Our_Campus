@@ -123,7 +123,7 @@ const updateEvent = asyncHandler(async (req, res) => {
 //@route    GET /posts/top
 //@access   Public
 const getTopEvents = asyncHandler(async (req, res) => {
-  const posts = await Event.find({}).sort({ rating: -1 }).limit(3);
+  const posts = await Event.find({}).sort({ numComments: 1 }).limit(3);
   res.json(posts);
 });
 

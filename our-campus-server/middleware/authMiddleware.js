@@ -1,10 +1,10 @@
 import jwt from "jsonwebtoken";
 import expressAsyncHandler from "express-async-handler";
-import User from "../models/userModel.js";
 
 const protect = expressAsyncHandler(async (req, res, next)=>{
   let token;
-  if(req.headers.authorization && req.header.authorization.startsWith("Bearer")){
+  console.log(req.headers);
+  if(req.headers.authorization && req.headers.authorization.startsWith("Bearer")){
     try{
       token = req.headers.authorization.split(" ")[1];
       const decode = jwt.verify(token, process.env.JWT_SECRET);

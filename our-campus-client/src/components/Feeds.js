@@ -2,72 +2,11 @@ import React from 'react';
 import Post from './Post';
 import {Row, Container} from 'react-bootstrap';
 
-const posts = [{
-  name: "Amazon Echo Dot 3rd Generation",
-  image: "1.jpg",
-  description:
-    "Meet Echo Dot - Our most popular smart speaker with a fabric design. It is our most compact smart speaker that fits perfectly into small space",
-  brand: "Amazon",
-  category: "Electronics",
-  price: 29.99,
-  countInStock: 0,
-  rating: 4,
-  numReviews: 12,
-},
-  {
-  name: "Amazon Echo Dot 3rd Generation",
-  image: "2.jpg",
-  description:
-    "Meet Echo Dot - Our most popular smart speaker with a fabric design. It is our most compact smart speaker that fits perfectly into small space",
-  brand: "Amazon",
-  category: "Electronics",
-  price: 29.99,
-  countInStock: 0,
-  rating: 4,
-  numReviews: 12,
-},
-  {
-  name: "Amazon Echo Dot 3rd Generation",
-  image: "3.jpg",
-  description:
-    "Meet Echo Dot - Our most popular smart speaker with a fabric design. It is our most compact smart speaker that fits perfectly into small space",
-  brand: "Amazon",
-  category: "Electronics",
-  price: 29.99,
-  countInStock: 0,
-  rating: 4,
-  numReviews: 12,
-},
-  {
-  name: "Amazon Echo Dot 3rd Generation",
-  image: "4.jpg",
-  description:
-    "Meet Echo Dot - Our most popular smart speaker with a fabric design. It is our most compact smart speaker that fits perfectly into small space",
-  brand: "Amazon",
-  category: "Electronics",
-  price: 29.99,
-  countInStock: 0,
-  rating: 4,
-  numReviews: 12,
-},
-  {
-  name: "Sadurathman",
-  image: "5.jpg",
-  caption:
-    "Meet Echo Dot - Our most popular smart speaker with a fabric design. It is our most compact smart speaker that fits perfectly into small space",
-  userId: "Amazon",
-  category: "Electronics",
-  likes: 29,
-  comments: 4,
-  numReviews: 12,
-}
-];
-
-const Feeds = () =>{
+const Feeds = ({posts}) =>{
   return (
     <Container>
     {posts.map((post)=>(
-      <Row key={post.image}>
+      <Row key={post._id}>
           <Post post={post} />
         </Row>
       ))
@@ -77,3 +16,65 @@ const Feeds = () =>{
 }
 
 export default Feeds;
+
+
+// const posts = [{
+//   name: "Amazon Echo Dot 3rd Generation",
+//   image: "images/1.jpg",
+//   description:
+//     "Meet Echo Dot - Our most popular smart speaker with a fabric design. It is our most compact smart speaker that fits perfectly into small space",
+//   brand: "Amazon",
+//   category: "Electronics",
+//   price: 29.99,
+//   countInStock: 0,
+//   rating: 4,
+//   numReviews: 12,
+// },
+//   {
+//   name: "Amazon Echo Dot 3rd Generation",
+//   image: "images/2.jpg",
+//   description:
+//     "Meet Echo Dot - Our most popular smart speaker with a fabric design. It is our most compact smart speaker that fits perfectly into small space",
+//   brand: "Amazon",
+//   category: "Electronics",
+//   price: 29.99,
+//   countInStock: 0,
+//   rating: 4,
+//   numReviews: 12,
+// },
+//   {
+//   name: "Amazon Echo Dot 3rd Generation",
+//   image: "images/3.jpg",
+//   description:
+//     "Meet Echo Dot - Our most popular smart speaker with a fabric design. It is our most compact smart speaker that fits perfectly into small space",
+//   brand: "Amazon",
+//   category: "Electronics",
+//   price: 29.99,
+//   countInStock: 0,
+//   rating: 4,
+//   numReviews: 12,
+// },
+//   {
+//   name: "Amazon Echo Dot 3rd Generation",
+//   image: "images/4.jpg",
+//   description:
+//     "Meet Echo Dot - Our most popular smart speaker with a fabric design. It is our most compact smart speaker that fits perfectly into small space",
+//   brand: "Amazon",
+//   category: "Electronics",
+//   price: 29.99,
+//   countInStock: 0,
+//   rating: 4,
+//   numReviews: 12,
+// },
+//   {
+//   name: "Sadurathman",
+//   image: "images/5.jpg",
+//   caption:
+//     "Meet Echo Dot - Our most popular smart speaker with a fabric design. It is our most compact smart speaker that fits perfectly into small space",
+//   userId: "Amazon",
+//   category: "Electronics",
+//   likes: 29,
+//   comments: 4,
+//   numReviews: 12,
+// }
+// ];

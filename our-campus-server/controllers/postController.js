@@ -2,6 +2,28 @@ import asyncHandler from "express-async-handler";
 import Post from "../models/postModel.js";
 import User from "../models/userModel.js";
 
+const latestPosts = asyncHandler(async()=>{
+  const posts = await Post.find({ $where: function () { return Date.now() - this._id.getTimestamp() < (24 * 60 * 60 * 1000)  } });
+
+  posts.forEach(async (post)=>{
+    const username = post.username;
+    const user = await User.findOne({username});
+    user.followers.forEach(async (follower)=>{
+      const friend = await User.findById(follower);
+      friend.home.push(post._id);
+      await friend.save();
+    })
+  })
+
+})
+
+const getPostUsingId = asyncHandler(async (postIds) => {
+  const post = await Post.find().where('_id').sort({ _id: -1 }).in(postIds).exec();
+  // console.log(post);
+  // const suggestions = await (await User.find().where('_id')).includes(user.suggestions).exec();
+  return post;
+});
+
 //@desc     Fetch all posts
 //@route    Get /posts
 //@access   Public
@@ -33,8 +55,11 @@ const getPostById = asyncHandler(async (req, res) => {
 //@access   Private/Admin
 const deletePost = asyncHandler(async (req, res) => {
   const post = await Post.findById(req.params.id);
-  if (post) {
+  const {username} = req.headers;
+  if (post && post.username === username) {
     await post.remove();
+    const user = await User.findOne({username});
+    user.posts.remove(post._id);
     res.json({ message: "Post removed" });
   } else {
     res.status(404);
@@ -44,18 +69,24 @@ const deletePost = asyncHandler(async (req, res) => {
 
 //@desc     create a post
 //@route    POST /posts
-//@access   Private/Admin
+//@access   Protect
 const createPost = asyncHandler(async (req, res) => {
-  const {username, image, caption} = req.body;
+  // console.log(req.body);
+  const {username, image, caption, dp} = req.body;
   const post = new Post({
     username,
     image,
     caption,
     likes: [],
+    dp
   });
-
-  const createdProduct = await post.save();
-  res.status(201).json(createdProduct);
+  const user = await User.findOne({username});
+  if(user){
+    const createdProduct = await post.save();
+    user.posts.push(createdProduct._id);
+    await user.save();
+    res.status(201).json(createdProduct);
+  }
 });
 
 //@desc     Update a post
@@ -118,6 +149,7 @@ const getTopPost = asyncHandler(async (req, res) => {
 });
 
 export {
+  latestPosts,
   createPost,
   updatePost,
   deletePost,
@@ -125,4 +157,5 @@ export {
   getPosts,
   craetePostComment,
   getTopPost,
+  getPostUsingId
 };

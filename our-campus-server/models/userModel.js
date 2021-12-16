@@ -16,11 +16,9 @@ const userSchema = mongoose.Schema(
     },
     tagline:{
       type: String,
-      required: true,
     },
     about:{
       type: String,
-      required: true,
     },
     rating:{
       type: Number,

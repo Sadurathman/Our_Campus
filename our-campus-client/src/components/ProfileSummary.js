@@ -3,19 +3,19 @@ import { Button, Card, Col, Container, Image, Row } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import Rating from "./Rating";
 
-const profile = {
-  username: "19EUCB045",
-  name: "Sadurathman V",
-  tagline: "MERN Stack Developer | Content Creator | Student '23",
-  dp: "1.jpg",
-  respect: 50,
-  rating: 4.5,
-  followers: 100,
-  following: 22,
-  skills: ["cpp", "java", "MERN"],
-};
+// const profile = {
+//   username: "19EUCB045",
+//   name: "Sadurathman V",
+//   tagline: "MERN Stack Developer | Content Creator | Student '23",
+//   dp: "1.jpg",
+//   respect: 50,
+//   rating: 4.5,
+//   followers: 100,
+//   following: 22,
+//   skills: ["cpp", "java", "MERN"],
+// };
 
-const ProfileSummary = () => {
+const ProfileSummary = ({profile, setModalShow}) => {
   return (
     <Card bg='dark' text='white' className='my-3 p-3 rounded'>
       <Card.Header className='mx-auto'>
@@ -26,7 +26,7 @@ const ProfileSummary = () => {
           <Row>
             <Col></Col>
             <Col xl='auto' md='auto'>
-              <Link to='/profile/sadu' className='username'>
+              <Link to={`/profile/${profile.username}`} className='username'>
                 {profile.name}
               </Link>
             </Col>
@@ -44,12 +44,15 @@ const ProfileSummary = () => {
         </Container>
       </Card.Body>
       <Card.Footer>
-        <Link to="/profile">
-          <Button size="sm" variant="info" className="me-3">Edit Profile</Button>
-        </Link>
-        <Link to="/enrollments">
-          <Button size="sm" variant="outline-light">Enrollments</Button>
-        </Link>
+          <Link to="/profile/edit">
+            <Button size="sm" variant="info" className="me-3">Edit Profile</Button>
+          </Link>
+          <Link to="/events/enrollments">
+            <Button size="sm" variant="outline-light">Enrollments</Button>
+          </Link>
+        <Row className="my-2">
+          <Button onClick={()=> setModalShow(true)} size='sm' variant="danger">+ Add Post</Button>
+        </Row>
       </Card.Footer>
     </Card>
   );
