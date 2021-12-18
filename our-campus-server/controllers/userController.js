@@ -3,12 +3,20 @@ import User from "../models/userModel.js";
 import generateToken from "../utils/generateTokens.js";
 import {getPostUsingId} from "./postController.js";
 
+
+const getUserByIds = asyncHandler(async (userIds) => {
+  const user = await User.find().where('_id').sort({ _id: -1 }).in(userIds).exec();
+  return user;
+});
+
 const refreshUsers = asyncHandler(async ()=>{
   const users = await User.find({});
-  users.forEach((user)=>{
+  users.forEach( async (user) => {
     user.home = [];
-    // user.suggestions
+    user.suggestions = await User.find({_id:{$ne:user._id}},{_id:1}).sort({ _id: -1 }).limit(5);
+    await user.save();
   })
+  console.log("Users Refreshed");
 })
 
 //@desc     Auth user & get token
@@ -21,6 +29,7 @@ const authUser = asyncHandler(async (req, res) => {
   if (user) {
     const home = await getPostUsingId(user.home);
     const posts = await getPostUsingId(user.posts);
+    const suggestions = await getUserByIds(user.suggestions);
 
     res.json({
       _id: user._id,
@@ -38,7 +47,7 @@ const authUser = asyncHandler(async (req, res) => {
       following: user.following,
       requests: user.requests,
       requested: user.requested,
-      suggestions: user.suggestions,
+      suggestions,
       joinedEvents: user.joinedEvents,
       hostedEvents: user.hostedEvents,
       posts,

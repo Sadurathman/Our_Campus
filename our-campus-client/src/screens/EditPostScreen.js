@@ -4,10 +4,11 @@ import { useDispatch, useSelector } from "react-redux";
 import Message from "../components/Message";
 import Loader from "../components/Loader";
 import {updatePost} from "../actions/postActions";
+import {updateEvent} from "../actions/eventActions";
 import FormContainer from "../components/FormContainer";
 import { getUserDetails } from "../actions/userActions";
 
-const UpdatePostScreen = ({history, post }) => {
+const UpdatePostScreen = ({history, post, event }) => {
   const [caption, setCaption] = useState("");
   const [_id, setId] = useState("");
 
@@ -27,22 +28,32 @@ const UpdatePostScreen = ({history, post }) => {
         dispatch(getUserDetails("Profile"));
       }
       else {
-        setCaption(post.caption);
-        setId(post._id);
+        if(post){
+          setCaption(post.caption);
+          setId(post._id);
+        }
+        
+        if(event){
+          setCaption(event.caption);
+          setId(event._id);
+        }
       }
     }
-  }, [dispatch, history, userInfo, post]);
+  }, [dispatch, history, userInfo, post, event]);
 
   const submitHandler = (e) => {
     e.preventDefault();
-    dispatch(updatePost({caption, _id}));
+    post && dispatch(updatePost({caption, _id}));
+    event && dispatch(updateEvent({caption, _id}));
   };
+
+  console.log(caption+" "+_id)
 
   return (
     <>
       <FormContainer>
-        <h1>Edit Post</h1>
-        {success && <Message variant="success">Post Updated</Message>}
+        <h1>Edit {post&&`Post`}{event&&`Event`}</h1>
+        {success && <Message variant="success">{post&&`Post Updated`}{event&&`Event Updated`}</Message>}
         {loading && <Loader />}
           <Form onSubmit={submitHandler}>
 

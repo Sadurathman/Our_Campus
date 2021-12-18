@@ -30,6 +30,8 @@ import Rating from "../components/Rating";
 const ProfileScreen = ({ match, history }) => {
   const dispatch = useDispatch();
   const [requestStatus, setRequestStatus] = useState(0);
+  const [acceptStatus, setAcceptStatus] = useState(0);
+
   const [fetchUser, setFetchUser] = useState(match.params.username);
 
   const userLogin = useSelector((state) => state.userLogin);
@@ -64,7 +66,7 @@ const ProfileScreen = ({ match, history }) => {
       {error && <Message variant='danger'>{error}</Message>}
       {user && user.posts ? (
         <>
-          {(user.requested?.includes(userInfo._id))&& (
+          {(user.requested?.includes(userInfo._id))&& acceptStatus===0(
             <Row className='text-center'>
               <Message variant='info'>
                 <Col>
@@ -74,6 +76,7 @@ const ProfileScreen = ({ match, history }) => {
                     variant='success'
                     onClick={() => {
                       dispatch(accept(user));
+                      setAcceptStatus(1);
                     }}
                   >
                     Accept
@@ -83,6 +86,7 @@ const ProfileScreen = ({ match, history }) => {
                     variant='danger'
                     onClick={() => {
                       dispatch(decline(user));
+                      setAcceptStatus(0);
                     }}
                   >
                     Decline

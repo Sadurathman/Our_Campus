@@ -149,7 +149,7 @@ export const updateEvent = (event) => async (dispatch, getState) => {
 
     const { data } = await axios.put(
       `/events/${event._id}`,
-      event,
+      {event, userInfo},
       config
     );
     dispatch({

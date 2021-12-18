@@ -18,7 +18,7 @@ connectDB();
 
 cron.schedule('0 0 * * *', ()=>{
   refreshUsers();
-  console.log("Updated Posts to People")
+  console.log("Refreshed Users")
 })
 
 const app = express();
@@ -52,4 +52,7 @@ if (process.env.NODE_ENV === "production") {
 }
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, console.log(`Server running @ port ${PORT}`));
+app.listen(PORT, async () => {
+  await refreshUsers();
+  console.log(`Server running @ port ${PORT}`)
+});

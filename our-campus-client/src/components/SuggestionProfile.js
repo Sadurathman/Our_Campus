@@ -2,30 +2,29 @@ import React from "react";
 import { Button, Row, Col, Image } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
-const SuggestionProfile = ({ profile }) => {
+const SuggestionProfile = ({ profile, history }) => {
   return (
     <Row className='mb-3'>
       <Col xs='3'>
-        <Image src={profile.image} width='48px' height='48px' roundedCircle />
+        <Image src={profile.dp} width='48px' height='48px' roundedCircle />
       </Col>
       <Col xs='8' className='d-flex align-items-center'>
         <Col xs='8'>
           <Row>
-            <Link to='/profile/sadu' className='username'>
-              {profile.name}
+            <Link to={`/profile/${profile.username}`} className='username'>
+              <small style={{ fontSize: "1.3vh" }}>{profile.name}</small>
             </Link>
           </Row>
           <Row>
-            <small className='text-muted'>{profile.name}</small>
-          </Row> 
+            <small className='text-muted'>{profile.username}</small>
+          </Row>
         </Col>
-        <Col className='mx-1'>
-          <Button size='sm' variant='secondary'>
-            Request
-          </Button>
-          {/* <Button size='sm' variant='outline-secondary'>
-            <small>Requested</small>
-          </Button> */}
+        <Col className='mx-2'>
+          <Link to={`/profile/${profile.username}`} className='username'>
+            <Button size='sm' variant='secondary'>
+              View
+            </Button>
+          </Link>
         </Col>
       </Col>
     </Row>

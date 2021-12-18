@@ -68,7 +68,7 @@ const createEvent = asyncHandler(async (req, res) => {
 //@route    PUT /posts/:id
 //@access   Private/Admin
 const updateEvent = asyncHandler(async (req, res) => {
-  const { caption } = req.body;
+  const { caption } = req.body.event;
   const event = await Event.findById(req.params.id);
 
   if (event) {

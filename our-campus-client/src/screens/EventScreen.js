@@ -2,12 +2,12 @@ import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { connect, useDispatch, useSelector } from "react-redux";
 import { Container, Col, Row } from "react-bootstrap";
-import Post from "../components/Post";
 import Message from "../components/Message";
 import Loader from "../components/Loader";
 import { listEvents } from "../actions/eventActions";
 import EventCarousel from "../components/EventCarousel";
 import ProfileSummary from "../components/ProfileSummary";
+import Event from "../components/Event";
 
 const EventScreen = ({ match, userInfo }) => {
   const dispatch = useDispatch();
@@ -45,7 +45,7 @@ const EventScreen = ({ match, userInfo }) => {
               {events.length > 0 ? (
                 events.map((event) => (
                   <Row key={event._id}>
-                    <Post post={event} />
+                    <Event event={event} />
                   </Row>
                 ))
               ) : (

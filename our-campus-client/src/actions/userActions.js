@@ -300,7 +300,8 @@ export const request = (user) => async(dispatch, getState) =>{
     };
 
     // console.log(user.username+" "+username);
-    const { data } = await axios.post(`/users/${user.username}/request`, {username}, config);
+    // const { data } = await axios.post(`/users/${user.username}/request`, {username}, config);
+    await axios.post(`/users/${user.username}/request`, {username}, config);
 
     dispatch({ type: USER_REQUEST_SUCCESS });
     // dispatch({ type: USER_DETAILS_SUCCESS, payload: data });
@@ -334,7 +335,8 @@ export const unrequest = (user) => async(dispatch, getState) =>{
       },
     };
 
-    const { data } = await axios.post(`/users/${user.username}/unrequest`, {username}, config);
+    // const { data } = await axios.post(`/users/${user.username}/unrequest`, {username}, config);
+    await axios.post(`/users/${user.username}/unrequest`, {username}, config);
 
     dispatch({ type: USER_UNREQUEST_SUCCESS });
     // dispatch({ type: USER_DETAILS_SUCCESS, payload: data });
@@ -368,7 +370,8 @@ export const accept = (user) => async(dispatch, getState) =>{
       },
     };
 
-    const { data } = await axios.post(`/users/${user.username}/accept`, {username}, config);
+    // const { data } = await axios.post(`/users/${user.username}/accept`, {username}, config);
+    await axios.post(`/users/${user.username}/accept`, {username}, config);
 
     dispatch({ type: USER_ACCEPT_SUCCESS });
     // dispatch({ type: USER_DETAILS_SUCCESS, payload: data });
@@ -402,7 +405,8 @@ export const decline = (user) => async(dispatch, getState) =>{
       },
     };
 
-    const { data } = await axios.post(`/users/${user.username}/decline`, {username}, config);
+    // const { data } = await axios.post(`/users/${user.username}/decline`, {username}, config);
+    await axios.post(`/users/${user.username}/decline`, {username}, config);
 
     dispatch({ type: USER_DECLINE_SUCCESS });
     // dispatch({ type: USER_DETAILS_SUCCESS, payload: data });

@@ -22,7 +22,7 @@ const HomeScreen = ({userInfo, loading}) => {
               )
             }
             </Col>
-            <Col md={3}><Suggestions/></Col>
+            <Col md={3}><Suggestions profiles={userInfo.suggestions}/></Col>
             </Row>
             </Container>
             );
