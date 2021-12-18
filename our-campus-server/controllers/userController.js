@@ -3,6 +3,14 @@ import User from "../models/userModel.js";
 import generateToken from "../utils/generateTokens.js";
 import {getPostUsingId} from "./postController.js";
 
+const refreshUsers = asyncHandler(async ()=>{
+  const users = await User.find({});
+  users.forEach((user)=>{
+    user.home = [];
+    // user.suggestions
+  })
+})
+
 //@desc     Auth user & get token
 //@route    POST /users/login
 //@access   Public
@@ -151,7 +159,7 @@ const getUserProfile = asyncHandler(async (req, res) => {
 //@route    PUT /users/profile
 //@access   Private
 const updateUserProfile = asyncHandler(async (req, res) => {
-  console.log(req.body);
+  // console.log(req.body);
   const user = await User.findById(req.body._id);
 
   if (user) {
@@ -234,7 +242,10 @@ const deleteUser = asyncHandler(async (req, res) => {
 //@route    GET /users/:id
 //@access   Private/Admin
 const getUserById = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.params.id);
+  const username = req.params.id;
+  const user = await User.findOne({username});
+  const posts = await getPostUsingId(user.posts);
+  user.posts = posts;
   if (user) {
     res.json(user);
   } else {
@@ -303,15 +314,65 @@ const updateUser = asyncHandler(async (req, res) => {
 });
 
 const requestUser = asyncHandler(async (req, res) => {
-  const username = req.username;
+  const username = req.body.username;
   const friendName = req.params.id;
+  
+  if(username === friendName){
+    res.status(404);
+    throw new Error("User cannot request himself");
+  }
 
-  const user = await User.findOne({username});
-  const friend = await User.findById({friendName});
-
-  if(user && friend){
+  const user = await User.findOne().where('username').equals(username).exec();
+  const friend = await User.findOne().where('username').equals(friendName).exec();
+  
+  console.log(user.username+" "+friend.username)
+  
+  if(user && friend ){
     user.requested.push(friend._id);
     friend.requests.push(user._id);
+    const updatedUser = await user.save();
+    await friend.save();
+    // console.log(updatedUser)
+    res.status(201).json(updatedUser);
+  }else{
+    res.status(404);
+    throw new Error("User not found");
+  }
+});
+
+const acceptUser = asyncHandler(async (req, res) => {
+  const username = req.body.username;
+  const friendName = req.params.id;
+
+  const user = await User.findOne().where('username').equals(username).exec();
+  const friend = await User.findOne().where('username').equals(friendName).exec();
+
+  if(user && friend){
+    user.requests.remove(friend._id);
+    user.followers.push(friend._id);
+    friend.requested.remove(user._id);
+    friend.following.push(user._id);
+    friend.home.push(user.posts);
+    await user.save();
+    await friend.save();
+    // console.log(user.username);
+    res.status(201).json(user);
+  }else{
+    res.status(404);
+    throw new Error("User not found");
+  }
+});
+
+const unRequestUser = asyncHandler(async (req, res) => {
+  const username = req.body.username;
+  const friendName = req.params.id;
+
+  const user = await User.findOne().where('username').equals(username).exec();
+  const friend = await User.findOne().where('username').equals(friendName).exec();
+
+  if(user && friend){
+    user.requested.remove(friend._id);
+    friend.requests.remove(user._id);
     await user.save();
     await friend.save();
     res.status(201).json(user);
@@ -321,18 +382,16 @@ const requestUser = asyncHandler(async (req, res) => {
   }
 });
 
-const acceptUser = asyncHandler(async (req, res) => {
-  const username = req.username;
+const declineUser = asyncHandler(async (req, res) => {
+  const username = req.body.username;
   const friendName = req.params.id;
 
-  const user = await User.findOne({username});
-  const friend = await User.findById({friendName});
+  const user = await User.findOne().where('username').equals(username).exec();
+  const friend = await User.findOne().where('username').equals(friendName).exec();
 
   if(user && friend){
-    user.requested.remove(friend._id);
-    user.following.remove(friend._id);
-    friend.requests.remove(user._id);
-    friend.followers.remove(user._id);
+    user.requests.remove(friend._id);
+    friend.requested.remove(user._id);
     await user.save();
     await friend.save();
     res.status(201).json(user);
@@ -344,6 +403,9 @@ const acceptUser = asyncHandler(async (req, res) => {
 
 export {
   requestUser,
+  acceptUser,
+  declineUser,
+  unRequestUser,
   getUserById,
   updateUser,
   registerUser,
@@ -352,4 +414,5 @@ export {
   updateUserProfile,
   authUser,
   getUserProfile,
+  refreshUsers
 };

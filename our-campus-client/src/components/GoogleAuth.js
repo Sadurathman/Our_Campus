@@ -29,7 +29,7 @@ class GoogleAuth extends React.Component {
   onAuthChange = (isSignedIn) => {
     if (isSignedIn) {
       this.username = window.gapi.auth2.getAuthInstance().currentUser.get().getBasicProfile().getEmail().split("@")[0];
-        console.log(this.username);
+        // console.log(this.username);
         this.props.login(this.username);
     } else {
       this.props.logout();
@@ -61,12 +61,12 @@ class GoogleAuth extends React.Component {
         <>
           <Navbar.Toggle aria-controls='basic-navbar-nav' />
           <Navbar.Collapse id='basic-navbar-nav'>
-            <Nav className='me-auto'>
+            <Nav className='me-5'>
               <Route
                 render={({ history }) => <SearchBox history={history} />}
               />
             </Nav>
-            <Nav>
+            <Nav className="ms-5">
               <LinkContainer to='/'>
                 <Nav.Link>
                   <i className='fas fa-home'></i> Home
@@ -82,11 +82,11 @@ class GoogleAuth extends React.Component {
                   <i className='fas fa-calendar-week'></i> Event
                 </Nav.Link>
               </LinkContainer>
-              <LinkContainer className='me-4' to='/notification'>
+              {/* <LinkContainer className='me-4' to='/notification'>
                 <Nav.Link>
                   <i className='fas fa-bell'></i> Notifications
                 </Nav.Link>
-              </LinkContainer>
+              </LinkContainer> */}
               <NavDropdown
                 id='nav-dropdown-dark-example'
                 title={`${this.username}`}

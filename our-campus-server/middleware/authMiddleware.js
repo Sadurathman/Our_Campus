@@ -3,7 +3,7 @@ import expressAsyncHandler from "express-async-handler";
 
 const protect = expressAsyncHandler(async (req, res, next)=>{
   let token;
-  console.log(req.headers);
+  // console.log(req.headers);
   if(req.headers.authorization && req.headers.authorization.startsWith("Bearer")){
     try{
       token = req.headers.authorization.split(" ")[1];
@@ -21,17 +21,18 @@ const protect = expressAsyncHandler(async (req, res, next)=>{
   }
 });
 
-const student = (req, res, next) =>{
-  if(req.user && req.user.userType === 1){
-    next();
-  }else{
-    res.status(401);
-    throw new Error("Not Authorized as staff");
-  }
-}
+// const student = (req, res, next) =>{
+//   if(req.body.user && req.body.user.userType > 0){
+//     next();
+//   }else{
+//     res.status(401);
+//     throw new Error("Not Authorized");
+//   }
+// }
 
 const staff = (req, res, next) =>{
-  if(req.user && req.user.userType === 2){
+  console.log(req.body.userInfo.userType);
+  if(req.body.userInfo && req.body.userInfo.userType > 1){
     next();
   }else{
     res.status(401);
@@ -40,12 +41,12 @@ const staff = (req, res, next) =>{
 }
 
 const admin = (req, res, next) =>{
-  if(req.user && req.user.userType === 3){
+  if(req.body.userInfo && req.body.userInfo.userType > 2){
     next();
   }else{
     res.status(401);
-    throw new Error("Not Authorized as staff");
+    throw new Error("Not Authorized as admin");
   }
 }
 
-export {protect, student, staff, admin};
+export {protect, staff, admin};

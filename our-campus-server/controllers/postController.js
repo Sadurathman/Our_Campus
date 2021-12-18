@@ -3,17 +3,9 @@ import Post from "../models/postModel.js";
 import User from "../models/userModel.js";
 
 const latestPosts = asyncHandler(async()=>{
-  const posts = await Post.find({ $where: function () { return Date.now() - this._id.getTimestamp() < (24 * 60 * 60 * 1000)  } });
+  // const posts = await Post.find({ $where: function () { return Date.now() - this._id.getTimestamp() < (24 * 60 * 60 * 1000)  } });
 
-  posts.forEach(async (post)=>{
-    const username = post.username;
-    const user = await User.findOne({username});
-    user.followers.forEach(async (follower)=>{
-      const friend = await User.findById(follower);
-      friend.home.push(post._id);
-      await friend.save();
-    })
-  })
+  
 
 })
 
@@ -85,6 +77,13 @@ const createPost = asyncHandler(async (req, res) => {
     const createdProduct = await post.save();
     user.posts.push(createdProduct._id);
     await user.save();
+    
+    user.followers.forEach(async (follower)=>{
+      const friend = await User.findById(follower);
+      friend.home.push(post._id);
+      await friend.save();
+    });
+
     res.status(201).json(createdProduct);
   }
 });

@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { connect, useDispatch, useSelector } from "react-redux";
 import { Container, Col, Row } from "react-bootstrap";
-import Feeds from "../components/Feeds";
+import Post from "../components/Post";
 import Message from "../components/Message";
 import Loader from "../components/Loader";
 import { listEvents } from "../actions/eventActions";
@@ -38,12 +38,20 @@ const EventScreen = ({ match, userInfo }) => {
       ) : (
         <Container>
           <Row>
-          <Col md={3}>
-            <ProfileSummary profile={userInfo} />
-          </Col>
-          <Col className="offset-1" >
-            <Feeds posts={events} />
-          </Col>
+            <Col md={3}>
+              <ProfileSummary profile={userInfo} />
+            </Col>
+            <Col className='offset-1'>
+              {events.length > 0 ? (
+                events.map((event) => (
+                  <Row key={event._id}>
+                    <Post post={event} />
+                  </Row>
+                ))
+              ) : (
+                <Message variant='info'>No Events Hosted or Available</Message>
+              )}
+            </Col>
           </Row>
         </Container>
       )}

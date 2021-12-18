@@ -23,7 +23,7 @@ function App({userInfo}) {
           <Route path='/' component={HomeScreen} exact/>
           <Route path='/profile' component={ProfileScreen} exact/>
           <Route path='/profile/:username' component={ProfileScreen} exact/>
-          <Route path='/profile/edit' component={ProfileEditScreen} exact/>
+          <Route path='/edit' component={ProfileEditScreen} exact/>
           <Route path='/event' component={EventScreen} exact/>
           </>
         ):(<Message variant="danger">Login With SKCET Mail Id to View</Message>)

@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import { Link } from "react-router-dom";
 import { Button, Card, Col, Image, Modal, Row } from "react-bootstrap";
 import { connect, useDispatch } from "react-redux";
@@ -8,7 +8,7 @@ import EditPostScreen from '../screens/EditPostScreen';
 const Post = ({ post, profile }) => {
   const dispatch = useDispatch();
 
-  const [modalShow, setModalShow] = React.useState(false);
+  const [modalShow, setModalShow] = useState(false);
 
   function UpdatePost(props) {
     return (

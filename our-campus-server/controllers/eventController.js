@@ -50,7 +50,7 @@ const deleteEvent = asyncHandler(async (req, res) => {
 //@route    POST /posts
 //@access   Private/Admin
 const createEvent = asyncHandler(async (req, res) => {
-  const {username, image, caption} = req.body;
+  const {username, image, caption} = req.body.event;
   const event = new Event({
     username,
     image,

@@ -23,6 +23,18 @@ import {
   USER_UPDATE_REQUEST,
   USER_UPDATE_SUCCESS,
   USER_UPDATE_FAIL,
+  USER_REQUEST_REQUEST,
+  USER_REQUEST_SUCCESS,
+  USER_REQUEST_FAIL,
+  USER_UNREQUEST_REQUEST,
+  USER_UNREQUEST_SUCCESS,
+  USER_UNREQUEST_FAIL,
+  USER_ACCEPT_REQUEST,
+  USER_ACCEPT_SUCCESS,
+  USER_ACCEPT_FAIL,
+  USER_DECLINE_REQUEST,
+  USER_DECLINE_SUCCESS,
+  USER_DECLINE_FAIL,
 } from "../constants/userConstants";
 
 import axios from "axios";
@@ -257,10 +269,146 @@ export const updateUser = (user) => async (dispatch, getState) => {
     const { data } = await axios.put(`/users/${user._id}`, user, config);
 
     dispatch({ type: USER_UPDATE_SUCCESS });
-    dispatch({ type: USER_DETAILS_SUCCESS, payload: data });
+    dispatch({ type: USER_LOGIN_SUCCESS, payload: data });
   } catch (error) {
     dispatch({
       type: USER_UPDATE_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
+export const request = (user) => async(dispatch, getState) =>{
+  try {
+    dispatch({
+      type: USER_REQUEST_REQUEST,
+    });
+
+    const {
+      userLogin: { userInfo:{username, token} },
+    } = getState();
+
+
+    const config = {
+      "Content-Type": "application/json",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+
+    // console.log(user.username+" "+username);
+    const { data } = await axios.post(`/users/${user.username}/request`, {username}, config);
+
+    dispatch({ type: USER_REQUEST_SUCCESS });
+    // dispatch({ type: USER_DETAILS_SUCCESS, payload: data });
+  } catch (error) {
+    dispatch({
+      type: USER_REQUEST_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
+export const unrequest = (user) => async(dispatch, getState) =>{
+  try {
+    dispatch({
+      type: USER_UNREQUEST_REQUEST,
+    });
+
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const username = userInfo.username;
+
+    const config = {
+      "Content-Type": "application/json",
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const { data } = await axios.post(`/users/${user.username}/unrequest`, {username}, config);
+
+    dispatch({ type: USER_UNREQUEST_SUCCESS });
+    // dispatch({ type: USER_DETAILS_SUCCESS, payload: data });
+  } catch (error) {
+    dispatch({
+      type: USER_UNREQUEST_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
+export const accept = (user) => async(dispatch, getState) =>{
+  try {
+    dispatch({
+      type: USER_ACCEPT_REQUEST,
+    });
+
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const username = userInfo.username;
+
+    const config = {
+      "Content-Type": "application/json",
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const { data } = await axios.post(`/users/${user.username}/accept`, {username}, config);
+
+    dispatch({ type: USER_ACCEPT_SUCCESS });
+    // dispatch({ type: USER_DETAILS_SUCCESS, payload: data });
+  } catch (error) {
+    dispatch({
+      type: USER_ACCEPT_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
+export const decline = (user) => async(dispatch, getState) =>{
+  try {
+    dispatch({
+      type: USER_DECLINE_REQUEST,
+    });
+
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const username = userInfo.username;
+
+    const config = {
+      "Content-Type": "application/json",
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const { data } = await axios.post(`/users/${user.username}/decline`, {username}, config);
+
+    dispatch({ type: USER_DECLINE_SUCCESS });
+    // dispatch({ type: USER_DETAILS_SUCCESS, payload: data });
+  } catch (error) {
+    dispatch({
+      type: USER_DECLINE_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message

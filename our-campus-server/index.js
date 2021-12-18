@@ -10,14 +10,14 @@ import eventRoutes from "./routes/eventRoutes.js";
 import postRoutes from "./routes/postRoutes.js";
 import homeRoutes from "./routes/homeRoutes.js";
 import uploadRoutes from "./routes/uploadRoute.js";
-import {latestPosts} from "./controllers/postController.js";
+import {refreshUsers} from "./controllers/userController.js";
 
 dotenv.config();
 
 connectDB();
 
 cron.schedule('0 0 * * *', ()=>{
-  latestPosts();
+  refreshUsers();
   console.log("Updated Posts to People")
 })
 

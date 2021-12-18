@@ -1,15 +1,19 @@
 import React from 'react';
 import Post from './Post';
 import {Row, Container} from 'react-bootstrap';
+import Message from './Message';
 
-const Feeds = ({posts}) =>{
+const Feeds = ({posts, type}) =>{
+  // console.log(posts);
   return (
     <Container>
-    {posts.map((post)=>(
+    {posts.length > 0 ? (posts.map((post)=>(
       <Row key={post._id}>
           <Post post={post} />
         </Row>
-      ))
+      ))):(
+        <Message variant="info">Have Not Posted Yet</Message>
+      )
     }
     </Container>
   )

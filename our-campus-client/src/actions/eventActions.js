@@ -98,7 +98,7 @@ export const deleteEvent = (id) => async (dispatch, getState) => {
   }
 };
 
-export const createEvent = () => async (dispatch, getState) => {
+export const createEvent = (event) => async (dispatch, getState) => {
   try {
     dispatch({
       type: EVENT_CREATE_REQUEST,
@@ -114,7 +114,7 @@ export const createEvent = () => async (dispatch, getState) => {
       },
     };
 
-    const { data } = await axios.post(`/events`, {}, config);
+    const { data } = await axios.post(`/events`, {userInfo, event}, config);
     dispatch({
       type: EVENT_CREATE_SUCCESS,
       payload: data,

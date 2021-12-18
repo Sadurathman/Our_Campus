@@ -8,22 +8,22 @@ import {
   getTopEvents,
   updateEvent,
 } from "../controllers/eventController.js";
-import { protect, admin } from "../middleware/authMiddleware.js";
+import { protect, admin, staff } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
-router.route("/").get(getEvents).post(protect, admin, createEvent);
+router.route("/").get(getEvents).post(protect, staff, createEvent);
 // router.route("/:id/comments").post(protect, craeteEventComment);
 router.get("/top", getTopEvents);
 router
   .route("/:id")
   .post(protect, getEvents)
-  .post(protect, admin, createEvent);
+  .post(protect, staff, createEvent);
 
 router
   .route("/:id")
   .get(getEventById)
-  .delete(protect, admin, deleteEvent)
-  .put(protect, admin, updateEvent);
+  .delete(protect, staff, deleteEvent)
+  .put(protect, staff, updateEvent);
 
 export default router;
