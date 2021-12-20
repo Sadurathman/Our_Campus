@@ -10,7 +10,8 @@
     "client": "npm start --prefix our-campus-client",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "data:import": "node our-campus-server/seeder",
-    "data:destroy": "node our-campus-server/seeder -d"
+    "data:destroy": "node our-campus-server/seeder -d",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix frontend && npm run build --prefix frontend"
   },
   "keywords": [
     "Sri",
