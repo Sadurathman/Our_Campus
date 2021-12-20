@@ -145,7 +145,7 @@ const ProfileScreen = ({ match, history }) => {
                       </Col>
                     </Row>
                     <Row className='my-3 text-center'>
-                      <Rating text={"Rating : "} value={5} />
+                      <Rating text={"Rating : "} value={user.rating} />
                     </Row>
                     {user._id === userInfo._id ? (
                       <>

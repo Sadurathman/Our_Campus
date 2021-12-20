@@ -28,7 +28,7 @@ const EventCarousel = () => {
             <Image src={event.image} alt={event.name} fluid />
             <Carousel.Caption className="carousel-caption">
               <h2>
-                {event.username}
+                {event.name}
                 {/* {event.name}(${event.prize}) */}
               </h2>
             </Carousel.Caption>

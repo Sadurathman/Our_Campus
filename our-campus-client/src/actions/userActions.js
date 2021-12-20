@@ -35,6 +35,9 @@ import {
   USER_DECLINE_REQUEST,
   USER_DECLINE_SUCCESS,
   USER_DECLINE_FAIL,
+  USER_DEVELOPER_REQUEST,
+  USER_DEVELOPER_SUCCESS,
+  USER_DEVELOPER_FAIL,
 } from "../constants/userConstants";
 
 import axios from "axios";
@@ -211,6 +214,29 @@ export const listUsers = () => async (dispatch, getState) => {
   } catch (error) {
     dispatch({
       type: USER_LIST_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
+export const listDevelopers = () => async (dispatch) => {
+  try {
+    dispatch({
+      type: USER_DEVELOPER_REQUEST,
+    });
+
+    const { data } = await axios.get(`/users/developers`);
+
+    dispatch({
+      type: USER_DEVELOPER_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: USER_DEVELOPER_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message

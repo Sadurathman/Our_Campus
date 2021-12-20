@@ -21,6 +21,12 @@ import {
   POST_TOP_REQUEST,
   POST_TOP_SUCCESS,
   POST_TOP_FAIL,
+  POST_LIKE_REQUEST,
+  POST_LIKE_FAIL,
+  POST_LIKE_SUCCESS,
+  POST_UNLIKE_REQUEST,
+  POST_UNLIKE_SUCCESS,
+  POST_UNLIKE_FAIL,
 } from "../constants/postConstants";
 
 export const listPosts =
@@ -179,6 +185,11 @@ export const createPostReview =
         userLogin: { userInfo },
       } = getState();
 
+      const userId = userInfo._id;
+      const username = userInfo.username;
+
+      review = {...review, userId, username}
+
       const config = {
         headers: {
           "Content-Type": "application/json",
@@ -186,7 +197,7 @@ export const createPostReview =
         },
       };
 
-      await axios.post(`/posts/${postId}/reviews`, review, config);
+      await axios.post(`/posts/${postId}/comments`, review, config);
       dispatch({
         type: POST_CREATE_REVIEW_SUCCESS,
       });
@@ -213,6 +224,76 @@ export const listTopPosts = () => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: POST_TOP_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
+export const like = (post) => async(dispatch, getState) =>{
+  try {
+    dispatch({
+      type: POST_LIKE_REQUEST,
+    });
+
+    const {
+      userLogin: { userInfo:{_id, token} },
+    } = getState();
+
+
+    const config = {
+      "Content-Type": "application/json",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+
+    // console.log(user.username+" "+username);
+    // const { data } = await axios.post(`/users/${user.username}/request`, {username}, config);
+    await axios.post(`/posts/${post._id}/like`, {_id}, config);
+
+    dispatch({ type: POST_LIKE_SUCCESS });
+    // dispatch({ type: USER_DETAILS_SUCCESS, payload: data });
+  } catch (error) {
+    dispatch({
+      type: POST_LIKE_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
+export const unlike = (post) => async(dispatch, getState) =>{
+  try {
+    dispatch({
+      type: POST_UNLIKE_REQUEST,
+    });
+
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const _id = userInfo._id;
+
+    const config = {
+      "Content-Type": "application/json",
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    // const { data } = await axios.post(`/users/${post.username}/unrequest`, {username}, config);
+    await axios.post(`/posts/${post._id}/unlike`, {_id}, config);
+
+    dispatch({ type: POST_UNLIKE_SUCCESS });
+    // dispatch({ type: USER_DETAILS_SUCCESS, payload: data });
+  } catch (error) {
+    dispatch({
+      type: POST_UNLIKE_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message

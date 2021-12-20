@@ -3,11 +3,23 @@ import User from "../models/userModel.js";
 import generateToken from "../utils/generateTokens.js";
 import {getPostUsingId} from "./postController.js";
 
-
 const getUserByIds = asyncHandler(async (userIds) => {
   const user = await User.find().where('_id').sort({ _id: -1 }).in(userIds).exec();
   return user;
 });
+
+const getUserByUsername = asyncHandler(async (usernames) => {
+  const user = await User.find().where('username').sort({ _id: -1 }).in(usernames).exec();
+  return user;
+});
+
+const developerUsers = asyncHandler(async (req, res)=>{
+  const developers = ['19eucb045', '19eucb050', '19eucb054', '19eucb035'];
+  const devDetails = await getUserByUsername(developers);
+  // console.log(devDetails);
+  res.json(devDetails);
+  res.status(200);
+})
 
 const refreshUsers = asyncHandler(async ()=>{
   const users = await User.find({});
@@ -80,7 +92,7 @@ const registerUser = asyncHandler(async (req, res) => {
     dp:"/images/default.jpg",
     // tagline: "tagline",
     // about: "about",
-    rating: 0,
+    rating: 2.5,
     respect: 0,
     // skills: [],
     // hobbies: [],
@@ -410,6 +422,30 @@ const declineUser = asyncHandler(async (req, res) => {
   }
 });
 
+const getMessageUsers = asyncHandler(async (req, res) => {
+  try {
+    let id = mongoose.Types.ObjectId(req.body.userInfo._id);
+
+    User.aggregate()
+      .match({ _id: { $not: { $eq: id } } })
+      .exec((err, users) => {
+        if (err) {
+          console.log(err);
+          res.setHeader("Content-Type", "application/json");
+          res.end({ message: "Failure" });
+          res.sendStatus(500);
+        } else {
+          res.send(users);
+        }
+      });
+  } catch (err) {
+    console.log(err);
+    res.setHeader("Content-Type", "application/json");
+    res.end({ message: "Unauthorized" });
+    res.sendStatus(401);
+  }
+})
+
 export {
   requestUser,
   acceptUser,
@@ -423,5 +459,7 @@ export {
   updateUserProfile,
   authUser,
   getUserProfile,
-  refreshUsers
+  refreshUsers,
+  getMessageUsers,
+  developerUsers
 };

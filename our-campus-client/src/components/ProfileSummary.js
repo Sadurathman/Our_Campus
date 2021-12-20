@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import Rating from "./Rating";
 import AddPostScreen from '../screens/AddPostScreen';
 import AddEventScreen from '../screens/AddEventScreen';
+import { Provider } from "react-redux";
 
 // const profile = {
 //   username: "19EUCB045",
@@ -89,7 +90,7 @@ const ProfileSummary = ({ profile }) => {
             </Row>
             <br />
             <Row>
-              <Rating text={"Rating : "} value={5} />
+              <Rating text={"Rating : "} value={profile.rating} />
             </Row>
           </Container>
         </Card.Body>

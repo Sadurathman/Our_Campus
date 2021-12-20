@@ -6,6 +6,9 @@ import {
   USER_DETAILS_REQUEST,
   USER_DETAILS_RESET,
   USER_DETAILS_SUCCESS,
+  USER_DEVELOPER_FAIL,
+  USER_DEVELOPER_REQUEST,
+  USER_DEVELOPER_SUCCESS,
   USER_LIST_FAIL,
   USER_LIST_REQUEST,
   USER_LIST_RESET,
@@ -92,6 +95,19 @@ export const userListReducer = (state = { users: [] }, action) => {
       return { loading: false, error: action.payload };
     case USER_LIST_RESET:
       return { users: [] };
+    default:
+      return state;
+  }
+};
+
+export const developerReducer = (state = { developers: [] }, action) => {
+  switch (action.type) {
+    case USER_DEVELOPER_REQUEST:
+      return { loading: true };
+    case USER_DEVELOPER_SUCCESS:
+      return { loading: false, developers: action.payload };
+    case USER_DEVELOPER_FAIL:
+      return { loading: false, error: action.payload };
     default:
       return state;
   }

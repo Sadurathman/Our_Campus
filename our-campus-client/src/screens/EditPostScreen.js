@@ -8,9 +8,10 @@ import {updateEvent} from "../actions/eventActions";
 import FormContainer from "../components/FormContainer";
 import { getUserDetails } from "../actions/userActions";
 
-const UpdatePostScreen = ({history, post, event }) => {
+const UpdatePostScreen = ({history, post, event, onHide }) => {
   const [caption, setCaption] = useState("");
   const [_id, setId] = useState("");
+  // const [refresh, setRefresh] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -45,9 +46,11 @@ const UpdatePostScreen = ({history, post, event }) => {
     e.preventDefault();
     post && dispatch(updatePost({caption, _id}));
     event && dispatch(updateEvent({caption, _id}));
+    onHide();
+    // setRefresh(true);
   };
 
-  console.log(caption+" "+_id)
+  // console.log(caption+" "+_id)
 
   return (
     <>
