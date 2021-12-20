@@ -1,1 +1,1 @@
-web: node backend/server.js
+web: node our-campus-server/index.js
