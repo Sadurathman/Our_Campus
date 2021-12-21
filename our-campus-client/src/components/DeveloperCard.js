@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import Rating from "./Rating";
 
 const DeveloperCard = ({ user }) => {
-  console.log(user);
+
   return (
     <Card bg='dark' text='white' className='my-3 p-3 rounded'>
       <Card.Body>
