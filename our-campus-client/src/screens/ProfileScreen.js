@@ -60,13 +60,15 @@ const ProfileScreen = ({ match, history }) => {
 
   if(!fetchUser && !match.params.username) user = userInfo;
 
+  console.log(user?.requested);
+
   return (
     <Container>
       {loading && <Loader />}
       {error && <Message variant='danger'>{error}</Message>}
-      {user && user.posts ? (
+      {user ? (
         <>
-          {(user.requested?.includes(userInfo._id))&& acceptStatus===0(
+          {(user?.requested?.includes(userInfo._id))&& acceptStatus===0 && (
             <Row className='text-center'>
               <Message variant='info'>
                 <Col>

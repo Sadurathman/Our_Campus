@@ -41,12 +41,12 @@ const Users = (props) => {
     getUsers().then((res) => setUsers(res));
   }, [newUser]);
 
-  useEffect(() => {
-    const socket = socketIOClient("http://localhost:5000");
-    socket.on("users", (data) => {
-      setNewUser(data);
-    });
-  }, []);
+  // useEffect(() => {
+  //   const socket = socketIOClient("http://localhost:5000");
+  //   socket.on("users", (data) => {
+  //     setNewUser(data);
+  //   });
+  // }, []);
 
   return (
     <List className={classes.list}>

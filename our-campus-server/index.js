@@ -4,7 +4,7 @@ import morgan from "morgan";
 import dotenv from "dotenv";
 import cron from "node-cron";
 import cors from "cors";
-import {Server} from "socket.io";
+// import {Server} from "socket.io";
 
 import connectDB from "./config/db.js";
 import userRoutes from "./routes/userRoutes.js";
@@ -63,9 +63,9 @@ const server = app.listen(PORT, async () => {
   console.log(`Server running @ port ${PORT}`)
 });
 
-const io = new Server().listen(server);
+// const io = new Server().listen(server);
 
-app.use((req, res, next)=>{
-  req.io = io;
-  next();
-})
+// app.use((req, res, next)=>{
+//   req.io = io;
+//   next();
+// })

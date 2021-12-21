@@ -102,10 +102,10 @@ const ChatBox = (props) => {
     scrollToBottom();
   }, [lastMessage, props.scope, props.conversationId]);
 
-  useEffect(() => {
-    const socket = socketIOClient("http://localhost:5000");
-    socket.on("messages", (data) => setLastMessage(data));
-  }, []);
+  // useEffect(() => {
+  //   const socket = socketIOClient("http://localhost:5000");
+  //   socket.on("messages", (data) => setLastMessage(data));
+  // }, []);
 
   const reloadMessages = () => {
     if (props.scope === "Global Chat") {

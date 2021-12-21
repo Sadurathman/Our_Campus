@@ -55,14 +55,14 @@ const Conversations = (props) => {
     getConversations().then((res) => setConversations(res));
   }, [newConversation]);
 
-  useEffect(() => {
-    let socket = socketIOClient("http://localhost:5000");
-    socket.on("messages", (data) => setNewConversation(data));
+  // useEffect(() => {
+  //   let socket = socketIOClient("http://localhost:5000");
+  //   socket.on("messages", (data) => setNewConversation(data));
 
-    return () => {
-      socket.removeListener("messages");
-    };
-  }, []);
+  //   return () => {
+  //     socket.removeListener("messages");
+  //   };
+  // }, []);
 
   return (
     <List className={classes.list}>
