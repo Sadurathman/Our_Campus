@@ -68,7 +68,7 @@ const Post = ({ post, profile }) => {
           <Row>
             <Col>
               <Image
-                src={post.image}
+                src={post.dp}
                 width='48px'
                 height='48px'
                 roundedCircle

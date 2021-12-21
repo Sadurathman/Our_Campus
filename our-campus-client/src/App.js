@@ -42,7 +42,7 @@ function App({ userInfo }) {
           ) : (
             <>
               <Message variant='danger'>
-                Login With SKCET Mail Id to View
+                Login With SKCET Mail Id to Continue
               </Message>
               <DeveloperScreen/>
             </>
