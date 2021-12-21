@@ -361,7 +361,7 @@ const acceptUser = asyncHandler(async (req, res) => {
     user.followers.push(friend._id);
     friend.requested.remove(user._id);
     friend.following.push(user._id);
-    friend.home.push(user.posts);
+    // friend.home.push(user.posts);
     await user.save();
     await friend.save();
     // console.log(user.username);
