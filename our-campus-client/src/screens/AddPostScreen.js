@@ -7,13 +7,16 @@ import { getUserDetails } from "../actions/userActions";
 import {createPost} from "../actions/postActions";
 import FormContainer from "../components/FormContainer";
 import axios from 'axios';
+import { useHistory } from "react-router-dom";
 
-const AddPostScreen = ({ match, history }) => {
+const AddPostScreen = ({hide}) => {
   const [username, setUsername] = useState("");
   const [image, setImage] = useState("");
   const [dp, setDp] = useState("");
   const [caption, setCaption] = useState("");
   const [uploading, setUploading] = useState(false);
+
+  const history = useHistory();
 
   const dispatch = useDispatch();
 
@@ -21,7 +24,7 @@ const AddPostScreen = ({ match, history }) => {
   const { userInfo } = userLogin;
 
   const postInfo = useSelector((state) => state.postCreate);
-  const { loading, success } = postInfo;
+  const { loading, success, error } = postInfo;
 
   useEffect(() => {
     if (!userInfo) {
@@ -39,6 +42,10 @@ const AddPostScreen = ({ match, history }) => {
   const submitHandler = (e) => {
     e.preventDefault();
     dispatch(createPost({ username, image, dp, caption}));
+    if(success) {
+      hide();
+      history.push("/profile");
+    }
   };
 
   const uploadFileHandler = async (e) => {
@@ -69,6 +76,7 @@ const AddPostScreen = ({ match, history }) => {
       <FormContainer>
         <h1>Add Post</h1>
         {success && <Message variant="success">Post Added</Message>}
+        {error && <Message variant="danger">{error}</Message>}
         {loading && <Loader />}
           <Form onSubmit={submitHandler}>
 

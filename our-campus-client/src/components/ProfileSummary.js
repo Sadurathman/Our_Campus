@@ -34,7 +34,7 @@ const ProfileSummary = ({ profile }) => {
           <Modal.Title id='contained-modal-title-vcenter'>Add Post</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <AddPostScreen />
+          <AddPostScreen hide={props.onHide}/>
         </Modal.Body>
         <Modal.Footer>
           <Button onClick={props.onHide}>Close</Button>

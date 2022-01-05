@@ -15,7 +15,7 @@ const HomeScreen = ({userInfo, loading}) => {
       <Col md={3}><ProfileSummary profile={userInfo}/></Col>
       <Col md={6}>
       {
-          userInfo.home.length > 0 ?(
+          userInfo?.home?.length > 0 ?(
             <Feeds posts = {userInfo.home}/>
             ):(
               <Message>No Feeds</Message>

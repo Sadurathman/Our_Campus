@@ -41,7 +41,6 @@ const ProfileScreen = ({ match, history }) => {
   let { loading, user, error } = userProfile;
 
   useEffect(() => {
-    console.log(fetchUser);
     if (!userInfo) {
       history.push("/login");
     }else if(fetchUser!==match.params.username) setFetchUser(match.params.username);
@@ -60,7 +59,6 @@ const ProfileScreen = ({ match, history }) => {
 
   if(!fetchUser && !match.params.username) user = userInfo;
 
-  console.log(user?.requested);
 
   return (
     <Container>

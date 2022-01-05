@@ -37,6 +37,7 @@ const AddPostScreen = ({ match, history }) => {
   const submitHandler = (e) => {
     e.preventDefault();
     dispatch(createEvent({ username, image, caption}));
+    // history.push("/");
   };
 
   const uploadFileHandler = async (e) => {
