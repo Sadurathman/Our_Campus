@@ -14,7 +14,7 @@ const getUserByUsername = asyncHandler(async (usernames) => {
 });
 
 const developerUsers = asyncHandler(async (req, res)=>{
-  const developers = ['19eucb045', '19eucb050', '19eucb054', '19eucb035'];
+  const developers = ['19eucb045', '19eucb007', '19eucb058'];
   const devDetails = await getUserByUsername(developers);
   // console.log(devDetails);
   res.json(devDetails);
