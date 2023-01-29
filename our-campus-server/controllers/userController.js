@@ -3,10 +3,10 @@ import Post from "../models/postModel.js";
 import User from "../models/userModel.js";
 import generateToken from "../utils/generateTokens.js";
 import { getPostUsingId } from "./postController.js";
-// import {
-//   recommendationSystem,
-//   recommendationForUser,
-// } from "../recommender/index.js";
+import {
+  recommendationSystem,
+  recommendationForUser,
+} from "../recommender/index.js";
 
 const getUserByIds = asyncHandler(async (userIds) => {
   const user = await User.find()
@@ -37,13 +37,15 @@ const developerUsers = asyncHandler(async (req, res) => {
 const refreshUsers = asyncHandler(async () => {
   const users = await User.find({});
   const posts = await Post.find({});
-  // const recommender = await recommendationSystem(users, posts);
+  const recommender = await recommendationSystem(users, posts);
   users.forEach(async (user) => {
     user.home = [];
-    // user.suggestions = await recommendationForUser(recommender, user);
-    user.suggestions = await User.find({ _id: { $ne: user._id } }, { _id: 1 })
-      .sort({ _id: -1 })
-      .limit(5);
+    user.suggestions = await recommendationForUser(recommender, user);
+    user.suggestions = user.suggestions.filter((u) => u === user._id);
+    console.log(user.id + " : " + user.suggestions);
+    // user.suggestions = await User.find({ _id: { $ne: user._id } }, { _id: 1 })
+    //   .sort({ _id: -1 })
+    //   .limit(5);
     await user.save();
   });
   console.log("Users Refreshed");
