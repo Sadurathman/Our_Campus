@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { connect, useDispatch, useSelector } from "react-redux";
 import { Container, Col, Row } from "react-bootstrap";
@@ -10,6 +10,8 @@ import ProfileSummary from "../components/ProfileSummary";
 import Event from "../components/Event";
 
 const EventScreen = ({ match, userInfo }) => {
+  // const [refresh, setRefresh] = useState(false);
+
   const dispatch = useDispatch();
 
   const keyword = match.params.keyword;
@@ -45,7 +47,7 @@ const EventScreen = ({ match, userInfo }) => {
               {events.length > 0 ? (
                 events.map((event) => (
                   <Row key={event._id}>
-                    <Event event={event} />
+                    <Event event={event}/>
                   </Row>
                 ))
               ) : (

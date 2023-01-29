@@ -41,7 +41,6 @@ const ProfileScreen = ({ match, history }) => {
   let { loading, user, error } = userProfile;
 
   useEffect(() => {
-    console.log(fetchUser);
     if (!userInfo) {
       history.push("/login");
     }else if(fetchUser!==match.params.username) setFetchUser(match.params.username);
@@ -60,13 +59,14 @@ const ProfileScreen = ({ match, history }) => {
 
   if(!fetchUser && !match.params.username) user = userInfo;
 
+
   return (
     <Container>
       {loading && <Loader />}
       {error && <Message variant='danger'>{error}</Message>}
-      {user && user.posts ? (
+      {user ? (
         <>
-          {(user.requested?.includes(userInfo._id))&& acceptStatus===0(
+          {(user?.requested?.includes(userInfo._id))&& acceptStatus===0 && (
             <Row className='text-center'>
               <Message variant='info'>
                 <Col>
@@ -145,7 +145,7 @@ const ProfileScreen = ({ match, history }) => {
                       </Col>
                     </Row>
                     <Row className='my-3 text-center'>
-                      <Rating text={"Rating : "} value={5} />
+                      <Rating text={"Rating : "} value={user.rating} />
                     </Row>
                     {user._id === userInfo._id ? (
                       <>

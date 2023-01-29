@@ -3,6 +3,7 @@ import {
   // craeteEventComment,
   createEvent,
   deleteEvent,
+  enrollEvents,
   getEventById,
   getEvents,
   getTopEvents,
@@ -15,15 +16,14 @@ const router = express.Router();
 router.route("/").get(getEvents).post(protect, staff, createEvent);
 // router.route("/:id/comments").post(protect, craeteEventComment);
 router.get("/top", getTopEvents);
-router
-  .route("/:id")
-  .post(protect, getEvents)
-  .post(protect, staff, createEvent);
+router.route("/:id").post(protect, getEvents).post(protect, staff, createEvent);
 
 router
   .route("/:id")
   .get(getEventById)
   .delete(protect, staff, deleteEvent)
   .put(protect, staff, updateEvent);
+
+router.route("/:id/enroll").post(protect, enrollEvents);
 
 export default router;

@@ -1,5 +1,6 @@
 import asyncHandler from "express-async-handler";
 import Event from "../models/eventModel.js";
+import User from "../models/userModel.js";
 
 //@desc     Fetch all posts
 //@route    Get /posts
@@ -16,7 +17,7 @@ const getEvents = asyncHandler(async (req, res) => {
 
   const events = await Event.find({ ...keyword });
 
-  res.json({events});
+  res.json({ events });
 });
 
 //@desc     Fetch single event
@@ -50,12 +51,11 @@ const deleteEvent = asyncHandler(async (req, res) => {
 //@route    POST /posts
 //@access   Private/Admin
 const createEvent = asyncHandler(async (req, res) => {
-  const {username, image, caption} = req.body.event;
+  const { username, image, caption } = req.body.event;
   const event = new Event({
     username,
     image,
     caption,
-    rating: 0,
     admins: [],
     enrolled: [],
   });
@@ -127,7 +127,32 @@ const getTopEvents = asyncHandler(async (req, res) => {
   res.json(posts);
 });
 
+const enrollEvents = asyncHandler(async (req, res) => {
+  const event = await Event.findById(req.params.id);
+  const user = await User.findById(req.body.userId);
+
+  console.log(req.params.id+" ", req.body.userId)
+
+  if (event) {
+    event.enrolled.push(req.body.userId);
+    if (user) {
+      user.joinedEvents.push(req.params.id);
+      const updatedUser = await user.save();
+      await event.save();
+      res.status(200);
+      res.json(updatedUser);
+    } else {
+      res.status(404);
+    throw new Error("Invalid User");
+    }
+  } else {
+    res.status(404);
+    throw new Error("Invalid Event");
+  }
+});
+
 export {
+  enrollEvents,
   createEvent,
   updateEvent,
   deleteEvent,

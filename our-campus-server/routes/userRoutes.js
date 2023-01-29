@@ -13,9 +13,15 @@ import {
   requestUser,
   acceptUser,
   declineUser,
-  unRequestUser
+  unRequestUser,
+  getMessageUsers,
+  developerUsers,
+  refreshUsers,
 } from "../controllers/userController.js";
 
+router.route("/developers").get(developerUsers);
+
+router.route("/refresh").get(protect, admin, refreshUsers);
 router.route("/").post(registerUser).get(protect, admin, getUsers);
 router.post("/login", authUser);
 router
@@ -29,9 +35,11 @@ router
   .get(protect, getUserById)
   .put(protect, admin, updateUser);
 
-router.route("/:id/request").post(protect, requestUser)
-router.route("/:id/unrequest").post(protect, unRequestUser)
-router.route("/:id/accept").post(protect, acceptUser)
-router.route("/:id/decline").post(protect, declineUser)
+router.route("/:id/request").post(protect, requestUser);
+router.route("/:id/unrequest").post(protect, unRequestUser);
+router.route("/:id/accept").post(protect, acceptUser);
+router.route("/:id/decline").post(protect, declineUser);
+
+router.route("/messages").get(getMessageUsers);
 
 export default router;

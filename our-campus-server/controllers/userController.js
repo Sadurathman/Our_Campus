@@ -1,31 +1,61 @@
 import asyncHandler from "express-async-handler";
+import Post from "../models/postModel.js";
 import User from "../models/userModel.js";
 import generateToken from "../utils/generateTokens.js";
-import {getPostUsingId} from "./postController.js";
-
+import { getPostUsingId } from "./postController.js";
+// import {
+//   recommendationSystem,
+//   recommendationForUser,
+// } from "../recommender/index.js";
 
 const getUserByIds = asyncHandler(async (userIds) => {
-  const user = await User.find().where('_id').sort({ _id: -1 }).in(userIds).exec();
+  const user = await User.find()
+    .where("_id")
+    .sort({ _id: -1 })
+    .in(userIds)
+    .exec();
   return user;
 });
 
-const refreshUsers = asyncHandler(async ()=>{
+const getUserByUsername = asyncHandler(async (usernames) => {
+  const user = await User.find()
+    .where("username")
+    .sort({ _id: -1 })
+    .in(usernames)
+    .exec();
+  return user;
+});
+
+const developerUsers = asyncHandler(async (req, res) => {
+  const developers = ["19eucb058", "19eucb045", "19eucb007"];
+  const devDetails = await getUserByUsername(developers);
+  console.log(devDetails);
+  res.json(devDetails);
+  res.status(200);
+});
+
+const refreshUsers = asyncHandler(async () => {
   const users = await User.find({});
-  users.forEach( async (user) => {
+  const posts = await Post.find({});
+  // const recommender = await recommendationSystem(users, posts);
+  users.forEach(async (user) => {
     user.home = [];
-    user.suggestions = await User.find({_id:{$ne:user._id}},{_id:1}).sort({ _id: -1 }).limit(5);
+    // user.suggestions = await recommendationForUser(recommender, user);
+    user.suggestions = await User.find({ _id: { $ne: user._id } }, { _id: 1 })
+      .sort({ _id: -1 })
+      .limit(5);
     await user.save();
-  })
+  });
   console.log("Users Refreshed");
-})
+});
 
 //@desc     Auth user & get token
 //@route    POST /users/login
 //@access   Public
 const authUser = asyncHandler(async (req, res) => {
   const { username } = req.body;
-  const user = await User.findOne().where('username').equals(username).exec();
-  
+  const user = await User.findOne().where("username").equals(username).exec();
+
   if (user) {
     const home = await getPostUsingId(user.home);
     const posts = await getPostUsingId(user.posts);
@@ -65,67 +95,55 @@ const authUser = asyncHandler(async (req, res) => {
 //@route    POST /users
 //@access   Public
 const registerUser = asyncHandler(async (req, res) => {
-  const { name, username, userType} = req.body;
+  const { name, username, userType } = req.body;
   const userExsists = await User.findOne({ username });
 
   if (userExsists) {
     // authUser(req, res);
     res.status(400);
     throw new Error("User already exists");
-  }else{
-  const user = await User.create({
-    name,
-    username,
-    userType,
-    dp:"/images/default.jpg",
-    // tagline: "tagline",
-    // about: "about",
-    rating: 0,
-    respect: 0,
-    // skills: [],
-    // hobbies: [],
-    // followers: [],
-    // following: [],
-    // requests: [],
-    // requested: [],
-    // suggestions: [],
-    // joinedEvents: [],
-    // hostedEvents: [],
-    // posts: [],
-    // home: [],
-    // clubs: [],
-  });
-
-  if (user) {
-    res.status(201).json({
-      _id: user._id,
-      username: user.username,
-      name: user.name,
-      dp: user.dp,
-      tagline: user.tagline,
-      about: user.about,
-      rating: user.rating,
-      respect: user.respect,
-      userType: user.userType,
-      skills: user.skills,
-      hobbies: user.hobbies,
-      followers: user.followers,
-      following: user.following,
-      requests: user.requests,
-      requested: user.requested,
-      suggestions: user.suggestions,
-      joinedEvents: user.joinedEvents,
-      hostedEvents: user.hostedEvents,
-      posts: user.posts,
-      home: user.home,
-      clubs: user.clubs,
-      token: generateToken(user._id),
-    });
   } else {
-    res.status(404);
-    throw new Error("Invalid user Data");
+    const user = await User.create({
+      name,
+      username,
+      userType,
+      dp: "/images/default.jpg",
+      tagline: "",
+      about: "",
+      rating: 2.5,
+      respect: 0,
+    });
+
+    if (user) {
+      res.status(201).json({
+        _id: user._id,
+        username: user.username,
+        name: user.name,
+        dp: user.dp,
+        tagline: user.tagline,
+        about: user.about,
+        rating: user.rating,
+        respect: user.respect,
+        userType: user.userType,
+        skills: user.skills,
+        hobbies: user.hobbies,
+        followers: user.followers,
+        following: user.following,
+        requests: user.requests,
+        requested: user.requested,
+        suggestions: user.suggestions,
+        joinedEvents: user.joinedEvents,
+        hostedEvents: user.hostedEvents,
+        posts: user.posts,
+        home: user.home,
+        clubs: user.clubs,
+        token: generateToken(user._id),
+      });
+    } else {
+      res.status(404);
+      throw new Error("Invalid user Data");
+    }
   }
-}
 });
 
 //@desc     Get user profile
@@ -172,26 +190,26 @@ const updateUserProfile = asyncHandler(async (req, res) => {
   const user = await User.findById(req.body._id);
 
   if (user) {
-      user.username = req.body.username || user.username,
-      user.name = req.body.name || user.name,
-      user.dp = req.body.dp || user.dp,
-      user.tagline = req.body.tagline || user.tagline,
-      user.about = req.body.about || user.about,
-      user.rating = req.body.rating || user.rating,
-      user.respect = req.body.respect || user.respect,
-      user.userType = req.body.userType || user.userType,
-      user.skills = req.body.skills || user.skills,
-      user.hobbies = req.body.hobbies || user.hobbies,
-      user.followers = req.body.followers || user.followers,
-      user.following = req.body.following || user.following,
-      user.requests = req.body.requests || user.requests,
-      user.requested = req.body.requested || user.requested,
-      user.suggestions = req.body.suggestions || user.suggestions,
-      user.joinedEvents = req.body.joinedEvents || user.joinedEvents,
-      user.hostedEvents = req.body.hostedEvents || user.hostedEvents,
-      user.posts = req.body.posts || user.posts,
-      user.home = req.body.home || user.home,
-      user.clubs = req.body.clubs || user.clubs
+    (user.username = req.body.username || user.username),
+      (user.name = req.body.name || user.name),
+      (user.dp = req.body.dp || user.dp),
+      (user.tagline = req.body.tagline || user.tagline),
+      (user.about = req.body.about || user.about),
+      (user.rating = req.body.rating || user.rating),
+      (user.respect = req.body.respect || user.respect),
+      (user.userType = req.body.userType || user.userType),
+      (user.skills = req.body.skills || user.skills),
+      (user.hobbies = req.body.hobbies || user.hobbies),
+      (user.followers = req.body.followers || user.followers),
+      (user.following = req.body.following || user.following),
+      (user.requests = req.body.requests || user.requests),
+      (user.requested = req.body.requested || user.requested),
+      (user.suggestions = req.body.suggestions || user.suggestions),
+      (user.joinedEvents = req.body.joinedEvents || user.joinedEvents),
+      (user.hostedEvents = req.body.hostedEvents || user.hostedEvents),
+      (user.posts = req.body.posts || user.posts),
+      (user.home = req.body.home || user.home),
+      (user.clubs = req.body.clubs || user.clubs);
 
     const updatedUser = await user.save();
 
@@ -252,7 +270,7 @@ const deleteUser = asyncHandler(async (req, res) => {
 //@access   Private/Admin
 const getUserById = asyncHandler(async (req, res) => {
   const username = req.params.id;
-  const user = await User.findOne({username});
+  const user = await User.findOne({ username });
   const posts = await getPostUsingId(user.posts);
   user.posts = posts;
   if (user) {
@@ -270,26 +288,26 @@ const updateUser = asyncHandler(async (req, res) => {
   const user = await User.findById(req.params.id);
 
   if (user) {
-    user.username = req.body.username || user.username,
-    user.name = req.body.name || user.name,
-    user.dp = req.body.dp || user.dp,
-    user.tagline = req.body.tagline || user.tagline,
-    user.about = req.body.about || user.about,
-    user.rating = req.body.rating || user.rating,
-    user.respect = req.body.respect || user.respect,
-    user.userType = req.body.userType || user.userType,
-    user.skills = req.body.skills || user.skills,
-    user.hobbies = req.body.hobbies || user.hobbies,
-    user.followers = req.body.followers || user.followers,
-    user.following = req.body.following || user.following,
-    user.requests = req.body.requests || user.requests,
-    user.requested = req.body.requested || user.requested,
-    user.suggestions = req.body.suggestions || user.suggestions,
-    user.joinedEvents = req.body.joinedEvents || user.joinedEvents,
-    user.hostedEvents = req.body.hostedEvents || user.hostedEvents,
-    user.posts = req.body.posts || user.posts,
-    user.home = req.body.home || user.home,
-    user.clubs = req.body.clubs || user.clubs
+    (user.username = req.body.username || user.username),
+      (user.name = req.body.name || user.name),
+      (user.dp = req.body.dp || user.dp),
+      (user.tagline = req.body.tagline || user.tagline),
+      (user.about = req.body.about || user.about),
+      (user.rating = req.body.rating || user.rating),
+      (user.respect = req.body.respect || user.respect),
+      (user.userType = req.body.userType || user.userType),
+      (user.skills = req.body.skills || user.skills),
+      (user.hobbies = req.body.hobbies || user.hobbies),
+      (user.followers = req.body.followers || user.followers),
+      (user.following = req.body.following || user.following),
+      (user.requests = req.body.requests || user.requests),
+      (user.requested = req.body.requested || user.requested),
+      (user.suggestions = req.body.suggestions || user.suggestions),
+      (user.joinedEvents = req.body.joinedEvents || user.joinedEvents),
+      (user.hostedEvents = req.body.hostedEvents || user.hostedEvents),
+      (user.posts = req.body.posts || user.posts),
+      (user.home = req.body.home || user.home),
+      (user.clubs = req.body.clubs || user.clubs);
 
     const updatedUser = await user.save();
 
@@ -325,25 +343,28 @@ const updateUser = asyncHandler(async (req, res) => {
 const requestUser = asyncHandler(async (req, res) => {
   const username = req.body.username;
   const friendName = req.params.id;
-  
-  if(username === friendName){
+
+  if (username === friendName) {
     res.status(404);
     throw new Error("User cannot request himself");
   }
 
-  const user = await User.findOne().where('username').equals(username).exec();
-  const friend = await User.findOne().where('username').equals(friendName).exec();
-  
-  console.log(user.username+" "+friend.username)
-  
-  if(user && friend ){
+  const user = await User.findOne().where("username").equals(username).exec();
+  const friend = await User.findOne()
+    .where("username")
+    .equals(friendName)
+    .exec();
+
+  console.log(user.username + " " + friend.username);
+
+  if (user && friend) {
     user.requested.push(friend._id);
     friend.requests.push(user._id);
     const updatedUser = await user.save();
     await friend.save();
     // console.log(updatedUser)
     res.status(201).json(updatedUser);
-  }else{
+  } else {
     res.status(404);
     throw new Error("User not found");
   }
@@ -353,20 +374,23 @@ const acceptUser = asyncHandler(async (req, res) => {
   const username = req.body.username;
   const friendName = req.params.id;
 
-  const user = await User.findOne().where('username').equals(username).exec();
-  const friend = await User.findOne().where('username').equals(friendName).exec();
+  const user = await User.findOne().where("username").equals(username).exec();
+  const friend = await User.findOne()
+    .where("username")
+    .equals(friendName)
+    .exec();
 
-  if(user && friend){
+  if (user && friend) {
     user.requests.remove(friend._id);
     user.followers.push(friend._id);
     friend.requested.remove(user._id);
     friend.following.push(user._id);
-    friend.home.push(user.posts);
+    // friend.home.push(user.posts);
     await user.save();
     await friend.save();
     // console.log(user.username);
     res.status(201).json(user);
-  }else{
+  } else {
     res.status(404);
     throw new Error("User not found");
   }
@@ -376,16 +400,19 @@ const unRequestUser = asyncHandler(async (req, res) => {
   const username = req.body.username;
   const friendName = req.params.id;
 
-  const user = await User.findOne().where('username').equals(username).exec();
-  const friend = await User.findOne().where('username').equals(friendName).exec();
+  const user = await User.findOne().where("username").equals(username).exec();
+  const friend = await User.findOne()
+    .where("username")
+    .equals(friendName)
+    .exec();
 
-  if(user && friend){
+  if (user && friend) {
     user.requested.remove(friend._id);
     friend.requests.remove(user._id);
     await user.save();
     await friend.save();
     res.status(201).json(user);
-  }else{
+  } else {
     res.status(404);
     throw new Error("User not found");
   }
@@ -395,18 +422,45 @@ const declineUser = asyncHandler(async (req, res) => {
   const username = req.body.username;
   const friendName = req.params.id;
 
-  const user = await User.findOne().where('username').equals(username).exec();
-  const friend = await User.findOne().where('username').equals(friendName).exec();
+  const user = await User.findOne().where("username").equals(username).exec();
+  const friend = await User.findOne()
+    .where("username")
+    .equals(friendName)
+    .exec();
 
-  if(user && friend){
+  if (user && friend) {
     user.requests.remove(friend._id);
     friend.requested.remove(user._id);
     await user.save();
     await friend.save();
     res.status(201).json(user);
-  }else{
+  } else {
     res.status(404);
     throw new Error("User not found");
+  }
+});
+
+const getMessageUsers = asyncHandler(async (req, res) => {
+  try {
+    let id = mongoose.Types.ObjectId(req.body.userInfo._id);
+
+    User.aggregate()
+      .match({ _id: { $not: { $eq: id } } })
+      .exec((err, users) => {
+        if (err) {
+          console.log(err);
+          res.setHeader("Content-Type", "application/json");
+          res.end({ message: "Failure" });
+          res.sendStatus(500);
+        } else {
+          res.send(users);
+        }
+      });
+  } catch (err) {
+    console.log(err);
+    res.setHeader("Content-Type", "application/json");
+    res.end({ message: "Unauthorized" });
+    res.sendStatus(401);
   }
 });
 
@@ -423,5 +477,7 @@ export {
   updateUserProfile,
   authUser,
   getUserProfile,
-  refreshUsers
+  refreshUsers,
+  getMessageUsers,
+  developerUsers,
 };

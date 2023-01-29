@@ -6,13 +6,17 @@ import {
   getPostById,
   getTopPost,
   updatePost,
-  getPosts
+  getPosts,
+  likePost,
+  unLikePost
 } from "../controllers/postController.js";
 import { protect, admin } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
 router.route("/").post(protect, createPost);
+router.route("/:id/like").post(protect, likePost);
+router.route("/:id/unlike").post(protect, unLikePost);
 router.route("/:id/comments").post(protect, craetePostComment);
 router.get("/top", getTopPost);
 router

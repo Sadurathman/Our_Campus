@@ -10,7 +10,8 @@
     "client": "npm start --prefix our-campus-client",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "data:import": "node our-campus-server/seeder",
-    "data:destroy": "node our-campus-server/seeder -d"
+    "data:destroy": "node our-campus-server/seeder -d",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix our-campus-client && npm run build --prefix our-campus-client"
   },
   "keywords": [
     "Sri",
@@ -25,6 +26,7 @@
   "author": "Sadurathman V",
   "license": "ISC",
   "dependencies": {
+    "cors": "^2.8.5",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "express-async-handler": "^1.2.0",

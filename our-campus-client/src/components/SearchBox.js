@@ -23,7 +23,7 @@ const SearchBox = ({ history }) => {
         className='mr-sm-2 ml-sm-5 me-2'
         aria-label='Search'
       />
-      <Button variant='outline-success'>Search</Button>
+      <Button onClick={submitHandler} variant='outline-success'>Search</Button>
     </Form>
   );
 };

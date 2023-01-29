@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import Rating from "./Rating";
 import AddPostScreen from '../screens/AddPostScreen';
 import AddEventScreen from '../screens/AddEventScreen';
+import { Provider } from "react-redux";
 
 // const profile = {
 //   username: "19EUCB045",
@@ -33,7 +34,7 @@ const ProfileSummary = ({ profile }) => {
           <Modal.Title id='contained-modal-title-vcenter'>Add Post</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <AddPostScreen />
+          <AddPostScreen hide={props.onHide}/>
         </Modal.Body>
         <Modal.Footer>
           <Button onClick={props.onHide}>Close</Button>
@@ -89,7 +90,7 @@ const ProfileSummary = ({ profile }) => {
             </Row>
             <br />
             <Row>
-              <Rating text={"Rating : "} value={5} />
+              <Rating text={"Rating : "} value={profile.rating} />
             </Row>
           </Container>
         </Card.Body>

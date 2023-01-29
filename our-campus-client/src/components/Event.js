@@ -1,14 +1,21 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import { Link } from "react-router-dom";
 import { Button, Card, Col, Modal, Row } from "react-bootstrap";
 import { connect, useDispatch } from "react-redux";
-import { deleteEvent } from "../actions/eventActions";
+import { deleteEvent, enroll } from "../actions/eventActions";
 import EditPostScreen from '../screens/EditPostScreen';
 
-const Event = ({ event, profile }) => {
+const Event = ({ event, profile}) => {
   const dispatch = useDispatch();
 
   const [modalShow, setModalShow] = useState(false);
+  const [isEnrolled, setIsEnrolled] = useState(false);
+
+  useEffect(()=>{
+    if(event && profile){
+      setIsEnrolled(event.enrolled.includes(profile._id));
+    }
+  },[isEnrolled])
 
   function UpdatePost(props) {
     return (
@@ -24,13 +31,18 @@ const Event = ({ event, profile }) => {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <EditPostScreen event = {props.event}/>
+          <EditPostScreen event = {props.event} onHide = {props.onHide}/>
         </Modal.Body>
         <Modal.Footer>
           <Button onClick={props.onHide}>Close</Button>
         </Modal.Footer>
       </Modal>
     );
+  }
+
+  const enrollHandler = (id) =>{
+    dispatch(enroll(id));
+    setIsEnrolled(true);
   }
 
   return (<>
@@ -72,12 +84,9 @@ const Event = ({ event, profile }) => {
         <Card.Title as='div'>
           <strong>{event.caption}</strong>
         </Card.Title>
-        <i className='like fas fa-heart fa-2x'></i>{" "}
-        <i className='far fa-comment fa-2x'></i>{" "}
-        <i className='fas fa-share fa-2x'></i>{" "}
       </Card.Body>
       <Card.Footer>
-        <Button variant="info">Enroll</Button>
+        {!isEnrolled ? (<Button variant="info" onClick={()=>enrollHandler(event._id)}>Enroll</Button>):(<Button variant="info">Enrolled</Button>)}
       </Card.Footer>
     </Card>
 </>

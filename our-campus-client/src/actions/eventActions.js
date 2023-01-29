@@ -1,4 +1,6 @@
 import axios from "axios";
+import { config } from "dotenv";
+import { dispatch } from "rxjs/internal/observable/pairs";
 import {
   EVENT_LIST_FAIL,
   EVENT_LIST_SUCCESS,
@@ -21,6 +23,9 @@ import {
   EVENT_TOP_REQUEST,
   EVENT_TOP_SUCCESS,
   EVENT_TOP_FAIL,
+  EVENT_ENROLL_FAIL,
+  EVENT_ENROLL_REQUEST,
+  EVENT_ENROLL_SUCCESS,
 } from "../constants/eventConstants";
 
 export const listEvents =
@@ -28,9 +33,7 @@ export const listEvents =
   async (dispatch) => {
     try {
       dispatch({ type: EVENT_LIST_REQUEST });
-      const { data } = await axios.get(
-        `/events?keyword=${keyword}`
-      );
+      const { data } = await axios.get(`/events?keyword=${keyword}`);
 
       dispatch({
         type: EVENT_LIST_SUCCESS,
@@ -114,7 +117,7 @@ export const createEvent = (event) => async (dispatch, getState) => {
       },
     };
 
-    const { data } = await axios.post(`/events`, {userInfo, event}, config);
+    const { data } = await axios.post(`/events`, { userInfo, event }, config);
     dispatch({
       type: EVENT_CREATE_SUCCESS,
       payload: data,
@@ -149,7 +152,7 @@ export const updateEvent = (event) => async (dispatch, getState) => {
 
     const { data } = await axios.put(
       `/events/${event._id}`,
-      {event, userInfo},
+      { event, userInfo },
       config
     );
     dispatch({
@@ -212,6 +215,44 @@ export const listTopEvents = () => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: EVENT_TOP_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
+export const enroll = (id) => async (dispatch, getState) => {
+  try {
+    dispatch({ type: EVENT_ENROLL_REQUEST });
+
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const userId = userInfo._id;
+
+    const { data } = await axios.post(
+      `/events/${id}/enroll`,
+      { userId },
+      config
+    );
+
+    dispatch({
+      type: EVENT_ENROLL_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: EVENT_ENROLL_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message

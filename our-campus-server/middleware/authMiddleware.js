@@ -1,21 +1,24 @@
 import jwt from "jsonwebtoken";
 import expressAsyncHandler from "express-async-handler";
 
-const protect = expressAsyncHandler(async (req, res, next)=>{
+const protect = expressAsyncHandler(async (req, res, next) => {
   let token;
   // console.log(req.headers);
-  if(req.headers.authorization && req.headers.authorization.startsWith("Bearer")){
-    try{
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.startsWith("Bearer")
+  ) {
+    try {
       token = req.headers.authorization.split(" ")[1];
       const decode = jwt.verify(token, process.env.JWT_SECRET);
       next();
-    }catch(error){
+    } catch (error) {
       console.error(error);
       res.status(401);
       throw new Error("Not Authorized, token failed");
     }
   }
-  if(!token){
+  if (!token) {
     res.status(401);
     throw new Error("Not authorized, no token");
   }
@@ -30,23 +33,23 @@ const protect = expressAsyncHandler(async (req, res, next)=>{
 //   }
 // }
 
-const staff = (req, res, next) =>{
+const staff = (req, res, next) => {
   console.log(req.body.userInfo.userType);
-  if(req.body.userInfo && req.body.userInfo.userType > 1){
+  if (req.body.userInfo && req.body.userInfo.userType > 1) {
     next();
-  }else{
+  } else {
     res.status(401);
     throw new Error("Not Authorized as staff");
   }
-}
+};
 
-const admin = (req, res, next) =>{
-  if(req.body.userInfo && req.body.userInfo.userType > 2){
+const admin = (req, res, next) => {
+  if (req.body.userInfo && req.body.userInfo.userType > 2) {
     next();
-  }else{
+  } else {
     res.status(401);
     throw new Error("Not Authorized as admin");
   }
-}
+};
 
-export {protect, staff, admin};
+export { protect, staff, admin };
