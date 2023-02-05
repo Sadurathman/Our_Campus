@@ -43,22 +43,23 @@ const ProfileScreen = ({ match, history }) => {
   useEffect(() => {
     if (!userInfo) {
       history.push("/login");
-    }else if(fetchUser!==match.params.username) setFetchUser(match.params.username);
-    else if ((!user)|| fetchUser !== user.username) {
+    } else if (fetchUser !== match.params.username)
+      setFetchUser(match.params.username);
+    else if (!user || fetchUser !== user.username) {
       fetchUser && dispatch(getUserDetails(fetchUser));
     } else {
       // 2 - accepted, 1 - requested, 0 - no
-      const status = user.followers?.includes(userInfo._id)
-        ? 2
-        : user.requests?.includes(userInfo._id)
-        ? 1
-        : 0;
+      const status =
+        user.followers && user.followers.includes(userInfo._id)
+          ? 2
+          : user.requests && user.requests.includes(userInfo._id)
+          ? 1
+          : 0;
       setRequestStatus(status);
     }
   }, [userInfo, user, fetchUser, history, match.params.username, dispatch]);
 
-  if(!fetchUser && !match.params.username) user = userInfo;
-
+  if (!fetchUser && !match.params.username) user = userInfo;
 
   return (
     <Container>
@@ -66,35 +67,38 @@ const ProfileScreen = ({ match, history }) => {
       {error && <Message variant='danger'>{error}</Message>}
       {user ? (
         <>
-          {(user?.requested?.includes(userInfo._id))&& acceptStatus===0 && (
-            <Row className='text-center'>
-              <Message variant='info'>
-                <Col>
-                  {`${user.name} has requested to follow you`}
-                  <Button
-                    className='ms-4 me-2'
-                    variant='success'
-                    onClick={() => {
-                      dispatch(accept(user));
-                      setAcceptStatus(1);
-                    }}
-                  >
-                    Accept
-                  </Button>
-                  <Button
-                    className='ml-2'
-                    variant='danger'
-                    onClick={() => {
-                      dispatch(decline(user));
-                      setAcceptStatus(0);
-                    }}
-                  >
-                    Decline
-                  </Button>
-                </Col>
-              </Message>
-            </Row>
-          )}
+          {user &&
+            user.requested &&
+            user.requested.includes(userInfo._id) &&
+            acceptStatus === 0 && (
+              <Row className='text-center'>
+                <Message variant='info'>
+                  <Col>
+                    {`${user.name} has requested to follow you`}
+                    <Button
+                      className='ms-4 me-2'
+                      variant='success'
+                      onClick={() => {
+                        dispatch(accept(user));
+                        setAcceptStatus(1);
+                      }}
+                    >
+                      Accept
+                    </Button>
+                    <Button
+                      className='ml-2'
+                      variant='danger'
+                      onClick={() => {
+                        dispatch(decline(user));
+                        setAcceptStatus(0);
+                      }}
+                    >
+                      Decline
+                    </Button>
+                  </Col>
+                </Message>
+              </Row>
+            )}
           <Card bg='dark' text='white' className='my-3 p-3 rounded'>
             <Card.Body>
               <Container>
@@ -127,19 +131,19 @@ const ProfileScreen = ({ match, history }) => {
                     <Row>{user.about}</Row>
                     <Row className='my-5'>
                       <Col>
-                        <span>{user.posts?.length}</span>
+                        <span>{user.posts && user.posts.length}</span>
                         <br />
                         <span>Posts</span>
                       </Col>
 
                       <Col>
-                        <span>{user.followers?.length}</span>
+                        <span>{user.followers && user.followers.length}</span>
                         <br />
                         <span>Followers</span>
                       </Col>
 
                       <Col>
-                        <span>{user.following?.length}</span>
+                        <span>{user.following && user.following.length}</span>
                         <br />
                         <span>Following</span>
                       </Col>
@@ -181,11 +185,7 @@ const ProfileScreen = ({ match, history }) => {
                         Un Request
                       </Button>
                     ) : (
-                      <Button
-                        variant="light"
-                      >
-                        Following
-                      </Button>
+                      <Button variant='light'>Following</Button>
                     )}
                     {/* <Row className='my-2'> */}
                     {/* <Button  */}
@@ -199,7 +199,8 @@ const ProfileScreen = ({ match, history }) => {
           </Card>
           <Row>
             <Col className='offset-2' md={8}>
-              {(user.followers?.includes(userInfo._id) || user._id === userInfo._id ) ? (
+              {(user.followers && user.followers.includes(userInfo._id)) ||
+              user._id === userInfo._id ? (
                 <Feeds posts={user.posts} />
               ) : (
                 <Message variant='danger'>Private Account</Message>

@@ -56,11 +56,12 @@ const DeveloperScreen = () => {
       {loading && <Loader />}
       <Row>Developed By</Row>
       <Row>
-        {developers?.map((developer) => (
-          <Col md={4}>
-            <DeveloperCard user={developer} />
-          </Col>
-        ))}
+        {developers &&
+          developers.map((developer) => (
+            <Col md={4}>
+              <DeveloperCard user={developer} />
+            </Col>
+          ))}
       </Row>
     </Container>
   );

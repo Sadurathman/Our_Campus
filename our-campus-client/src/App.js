@@ -12,6 +12,7 @@ import EventScreen from "./screens/EventScreen";
 import Message from "./components/Message";
 import DeveloperScreen from "./screens/DeveloperScreen";
 import HelpScreen from "./screens/HelpScreen";
+import Chat from "./screens/Chat";
 
 function App({ userInfo }) {
   return (
@@ -31,7 +32,7 @@ function App({ userInfo }) {
               <Route path='/edit' component={ProfileEditScreen} exact />
               <Route path='/settings' component={ProfileEditScreen} exact />
               <Route path='/event' component={EventScreen} exact />
-              <Route path='/chats' component={HelpScreen} />
+              <Route path='/chats' component={Chat} />
               <Route path='/help' component={HelpScreen} />
               <Route
                 path='/clubs'

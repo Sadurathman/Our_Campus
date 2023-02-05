@@ -17,10 +17,11 @@ import {
   getMessageUsers,
   developerUsers,
   refreshUsers,
+  searchUser,
 } from "../controllers/userController.js";
 
 router.route("/developers").get(developerUsers);
-
+router.route("/chat").get(protect, searchUser);
 router.route("/refresh").get(protect, admin, refreshUsers);
 router.route("/").post(registerUser).get(protect, admin, getUsers);
 router.post("/login", authUser);

@@ -58,6 +58,7 @@ const recommendationSystem = async (users, posts) => {
     });
   });
 
+  // console.log(data);
   return await recommenderInitialization(data, "college");
 };
 
@@ -88,9 +89,9 @@ const recommendationSystem = async (users, posts) => {
 */
 const recommenderInitialization = async (data, namespace) => {
   await recommend.initialize_namespace(namespace);
-  await console.log(recommend.esm);
+  // await console.log(recommend.esm);
   await recommend.events([...data]);
-  await console.log(recommend.esm);
+  // await console.log(recommend.esm);
   return await recommend;
 };
 
@@ -123,10 +124,16 @@ const val = {
 const recommendationForUser = async (recommender, user) => {
   // console.log("After");
   // console.log(recommender);
-  const suggestions = await recommender.recommendations_for_person(
+  const suggestionsOnPeople = await recommender.recommendations_for_person(
     "college",
     user._id,
-    { actions: { likes: 1, request: 2, comment: 3, follow: 5 } }
+    { actions: { request: 1, follow: 4 } }
+  );
+
+  const suggestionsOnPosts = await recommender.recommendations_for_person(
+    "college",
+    user._id,
+    { actions: { likes: 2, comment: 4 } }
   );
   // console.log(
   //   "Recommender User : " +
@@ -138,11 +145,16 @@ const recommendationForUser = async (recommender, user) => {
   //   "Suggestions for " +
   //     user.username +
   //     " : " +
-  //     JSON.stringify(suggestions, null, 2)
+  //     JSON.stringify(suggestionsOnPosts, null, 2)
   // );
-  const suggestedusers = suggestions.neighbourhood
-    ? await Object.keys(suggestions.neighbourhood)
-    : [];
+
+  const suggestedusers = [];
+  suggestionsOnPeople.recommendations.forEach((sug) => {
+    suggestedusers.push(sug.thing);
+  });
+
+  // console.log("Id : " + suggestedusers);
+
   return suggestedusers.length > 5
     ? suggestedusers.splice(0, 5)
     : suggestedusers;

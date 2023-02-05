@@ -41,8 +41,10 @@ const refreshUsers = asyncHandler(async () => {
   users.forEach(async (user) => {
     user.home = [];
     user.suggestions = await recommendationForUser(recommender, user);
-    user.suggestions = user.suggestions.filter((u) => u === user._id);
-    console.log(user.id + " : " + user.suggestions);
+    user.suggestions = await user.suggestions.filter(
+      (u) => u !== user._id && !user.following.includes(u)
+    );
+    // console.log(user.username + " : " + user.suggestions);
     // user.suggestions = await User.find({ _id: { $ne: user._id } }, { _id: 1 })
     //   .sort({ _id: -1 })
     //   .limit(5);
@@ -466,6 +468,16 @@ const getMessageUsers = asyncHandler(async (req, res) => {
   }
 });
 
+const searchUser = async (req, res) => {
+  const { search } = req.query;
+
+  const user = await User.find({
+    username: { $regex: search, $options: "i" },
+  }).select("username name _id dp tagline");
+
+  res.status(200).json(user);
+};
+
 export {
   requestUser,
   acceptUser,
@@ -482,4 +494,5 @@ export {
   refreshUsers,
   getMessageUsers,
   developerUsers,
+  searchUser,
 };
