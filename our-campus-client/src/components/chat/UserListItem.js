@@ -6,9 +6,9 @@ const UserListItem = ({ user, handleFunction }) => {
     <ListGroup.Item
       action
       onClick={handleFunction}
+      variant='info'
       style={{
         cursor: "pointer",
-        backgroundColor: "#4267B2",
         borderRadius: "5px",
       }}
       className='d-flex align-items-center'

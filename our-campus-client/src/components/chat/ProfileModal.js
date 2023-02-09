@@ -1,5 +1,5 @@
 import React from "react";
-import { Modal, Button } from "react-bootstrap";
+import { Modal, Button, Image } from "react-bootstrap";
 
 const ProfileModal = ({ user, children }) => {
   const [show, setShow] = React.useState(false);
@@ -23,13 +23,15 @@ const ProfileModal = ({ user, children }) => {
           <Modal.Header closeButton>
             <Modal.Title>{user.username}</Modal.Title>
           </Modal.Header>
-          <Modal.Body>
-            <img
+          <Modal.Body className='text-center'>
+            <Image
               src={user.dp}
-              alt={user.username}
-              style={{ maxHeight: "30vh", maxWidth: "30vh" }}
+              width='200px'
+              height='200px'
+              roundedCircle
+              className='mx-auto'
             />
-            <p>Name: {user.name}</p>
+            <p>{user.name}</p>
           </Modal.Body>
           <Modal.Footer>
             <Button variant='secondary' onClick={handleClose}>

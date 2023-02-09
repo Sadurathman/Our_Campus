@@ -35,18 +35,11 @@ const ScrollableChat = ({ messages, user }) => {
           <div style={{ display: "flex" }} key={m._id}>
             {(isSameSender(messages, m, i, user._id) ||
               isLastMessage(messages, i, user._id)) && (
-              <Tooltip
-                placement='bottom'
-                title={m.sender.username}
-                component={Image}
+              <Image
                 src={m.sender.dp}
-                style={{
-                  marginTop: "7px",
-                  marginRight: "1px",
-                  size: "sm",
-                  cursor: "pointer",
-                  display: "inline-block",
-                }}
+                width='20px'
+                height='20px'
+                roundedCircle
               />
             )}
             <span
@@ -58,7 +51,7 @@ const ScrollableChat = ({ messages, user }) => {
                 marginTop: isSameUser(messages, m, i, user._id) ? 3 : 10,
                 borderRadius: "20px",
                 padding: "5px 15px",
-                maxWidth: "60vh",
+                maxWidth: "50vw",
               }}
             >
               {m.message}

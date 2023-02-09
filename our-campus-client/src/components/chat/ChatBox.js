@@ -24,6 +24,7 @@ const ChatBox = (props) => {
         padding: "1rem",
         background: "white",
         width: "68%",
+        height: "70vh",
         borderRadius: "1rem",
         border: "1px solid #dee2e6",
       }}

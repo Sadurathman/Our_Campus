@@ -74,23 +74,17 @@ const MyChats = ({
     }
   };
 
-  const renderSearchBox = () =>
-    users && users.length < 1 ? (
-      <Form onSubmit={handleSearch} className='d-flex' inline>
-        <Form.Control
-          type='search'
-          name='q'
-          onChange={(e) => setKeyword(e.target.value)}
-          placeholder='Search'
-          className='mr-sm-2 ml-sm-5 me-2'
-          aria-label='Search'
-        />
-        <Button onClick={handleSearch} variant='outline-success'>
-          Search
-        </Button>
-      </Form>
-    ) : (
-      <ListGroup style={{ maxWidth: "30vw", backgroundColor: "blue" }}>
+  const renderSearchResult = () =>
+    users &&
+    users.length > 0 && (
+      <ListGroup
+        style={{
+          overflowY: "scroll",
+          height: "50vh",
+          width: "25vw",
+          paddingTop: "2vh",
+        }}
+      >
         {users.map((user) => (
           <UserListItem
             key={user._id}
@@ -113,33 +107,49 @@ const MyChats = ({
               </Button>
             </GroupChatModal>
           </div> */}
-          {renderSearchBox()}
-          <ListGroup className='pt-3 mt-3' style={{ backgroundColor: "#000" }}>
-            {chats ? (
-              chats.map((chat) => (
-                <ListGroup.Item
-                  variant='primary'
-                  onClick={() => setSelectedChat(chat)}
-                  key={chat && chat._id}
-                  className='mt-2'
-                  style={{
-                    backgroundColor:
-                      selectedChat === chat
-                        ? "rgba(67, 43, 255, 0.8)"
-                        : "#808080",
-                    color: selectedChat === chat ? "white" : "black",
-                    cursor: "pointer",
-                  }}
-                >
-                  {chat && !chat.isGroupChat
-                    ? getSender(loggedUser, chat.users)
-                    : chat.chatName}
-                </ListGroup.Item>
-              ))
-            ) : (
-              <ChatLoading />
-            )}
-          </ListGroup>
+          <Form onSubmit={handleSearch} className='d-flex' inline>
+            <Form.Control
+              type='search'
+              name='q'
+              onChange={(e) => setKeyword(e.target.value)}
+              placeholder='Search'
+              className='mr-sm-2 ml-sm-5 me-2'
+              aria-label='Search'
+            />
+            <Button onClick={handleSearch} variant='outline-success'>
+              Search
+            </Button>
+          </Form>
+          {renderSearchResult()}
+          {users && users.length < 1 && (
+            <ListGroup
+              className='pt-3 mt-3'
+              style={{
+                overflowY: "scroll",
+                height: "50vh",
+                msOverflowStyle: "none",
+                WebkitScrollBar: "none",
+              }}
+            >
+              {chats ? (
+                chats.map((chat) => (
+                  <ListGroup.Item
+                    variant={selectedChat === chat ? "info" : "light"}
+                    onClick={() => setSelectedChat(chat)}
+                    key={chat && chat._id}
+                    className='mt-2'
+                    action
+                  >
+                    {chat && !chat.isGroupChat
+                      ? getSender(loggedUser, chat.users)
+                      : chat.chatName}
+                  </ListGroup.Item>
+                ))
+              ) : (
+                <ChatLoading />
+              )}
+            </ListGroup>
+          )}
         </Col>
       </Row>
       {/* <Row>
