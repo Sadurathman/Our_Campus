@@ -1,10 +1,19 @@
 import React from "react";
-import { Button, Card, Col, Container, Image, Modal, Row } from "react-bootstrap";
+import {
+  Button,
+  Card,
+  Col,
+  Container,
+  Image,
+  Modal,
+  Row,
+} from "react-bootstrap";
 import { Link } from "react-router-dom";
 import Rating from "./Rating";
-import AddPostScreen from '../screens/AddPostScreen';
-import AddEventScreen from '../screens/AddEventScreen';
+import AddPostScreen from "../screens/AddPostScreen";
+import AddEventScreen from "../screens/AddEventScreen";
 import { Provider } from "react-redux";
+import SkillModelForm from "./SkillModalForm";
 
 // const profile = {
 //   username: "19EUCB045",
@@ -34,7 +43,7 @@ const ProfileSummary = ({ profile }) => {
           <Modal.Title id='contained-modal-title-vcenter'>Add Post</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <AddPostScreen hide={props.onHide}/>
+          <AddPostScreen hide={props.onHide} />
         </Modal.Body>
         <Modal.Footer>
           <Button onClick={props.onHide}>Close</Button>
@@ -52,7 +61,9 @@ const ProfileSummary = ({ profile }) => {
         centered
       >
         <Modal.Header closeButton>
-          <Modal.Title id='contained-modal-title-vcenter'>Add Event</Modal.Title>
+          <Modal.Title id='contained-modal-title-vcenter'>
+            Add Event
+          </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <AddEventScreen />
@@ -123,6 +134,7 @@ const ProfileSummary = ({ profile }) => {
                 + Add Event
               </Button>
             )}
+            <SkillModelForm user={profile} />
           </Row>
         </Card.Footer>
       </Card>

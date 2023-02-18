@@ -2,7 +2,12 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button, Card, Col, Image, Modal, Row } from "react-bootstrap";
 import { connect, useDispatch } from "react-redux";
-import { createPostReview, deletePost, like, unlike } from "../actions/postActions";
+import {
+  createPostReview,
+  deletePost,
+  like,
+  unlike,
+} from "../actions/postActions";
 import EditPostScreen from "../screens/EditPostScreen";
 
 const Post = ({ post, profile }) => {
@@ -50,9 +55,9 @@ const Post = ({ post, profile }) => {
 
   const commentHandler = (e) => {
     e.preventDefault();
-    dispatch(createPostReview(post._id, {comment }));
-    const name = profile.username
-    post.comments.push({comment, name});
+    dispatch(createPostReview(post._id, { comment }));
+    const name = profile.username;
+    post.comments.push({ comment, name });
     setComment("");
   };
 
@@ -63,16 +68,16 @@ const Post = ({ post, profile }) => {
         show={modalShow}
         onHide={() => setModalShow(false)}
       />
-      <Card bg='dark' text='white' className='my-3 p-3 rounded'>
+      <Card
+        bg='dark'
+        text='white'
+        className='my-3 p-3 rounded'
+        style={{ width: "50vw" }}
+      >
         <Card.Header>
           <Row>
             <Col>
-              <Image
-                src={post.dp}
-                width='48px'
-                height='48px'
-                roundedCircle
-              />
+              <Image src={post.dp} width='48px' height='48px' roundedCircle />
             </Col>
             <Col>
               <Link
@@ -111,7 +116,15 @@ const Post = ({ post, profile }) => {
           </Row>
         </Card.Header>
         <Link to={`/post/${post._id}`}>
-          <Card.Img src={post.image} variant='top' />
+          <Card.Img
+            src={post.image}
+            variant='top'
+            style={{
+              width: "90%",
+              marginLeft: "50%",
+              transform: "translateX(-50%)",
+            }}
+          />
         </Link>
         <Card.Body>
           <Card.Title as='div'>
@@ -138,24 +151,35 @@ const Post = ({ post, profile }) => {
         {enableComment && (
           <Card.Footer>
             <Row>
-              {post.comments.map((comment)=>(
-               <Row className="my-1 border border-secondary">
-                 <Link to={`/profile/${comment.name}`}>
-                   <strong className="text-muted">{comment.name}</strong>
-                 </Link>
-                 <p className="ms-3">{comment.comment}</p>
-                </Row> 
+              {post.comments.map((comment) => (
+                <Row className='my-1 border border-secondary'>
+                  <Link to={`/profile/${comment.name}`}>
+                    <strong className='text-muted'>{comment.name}</strong>
+                  </Link>
+                  <p className='ms-3'>{comment.comment}</p>
+                </Row>
               ))}
             </Row>
-            <Row className="my-3 text-center">
-              <Col md={2} className="my-2">
-                Comment 
+            <Row className='my-3 text-center'>
+              <Col md={2} className='my-2'>
+                Comment
               </Col>
-              <Col md={6} className="my-2">
-                <input value={comment} onChange={(e)=> setComment(e.target.value)} style={{ border: "none", width:"20vw" }} />
+              <Col md={6} className='my-2'>
+                <input
+                  value={comment}
+                  onChange={(e) => setComment(e.target.value)}
+                  style={{ border: "none", width: "20vw" }}
+                />
               </Col>
               <Col md={3}>
-              <Button className="ms-3" size="sm" variant="light" onClick={(e)=>commentHandler(e)}>Comment</Button>
+                <Button
+                  className='ms-3'
+                  size='sm'
+                  variant='light'
+                  onClick={(e) => commentHandler(e)}
+                >
+                  Comment
+                </Button>
               </Col>
             </Row>
           </Card.Footer>

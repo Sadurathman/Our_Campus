@@ -1,13 +1,13 @@
 import React from "react";
 import { connect } from "react-redux";
 import { Route } from "react-router-dom";
-import { Navbar, Nav, NavDropdown, Button} from "react-bootstrap";
+import { Navbar, Nav, NavDropdown, Button } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 
 import SearchBox from "./SearchBox";
 import { login, logout, register } from "../actions/userActions";
 
-const host = 'skcet.ac.in';
+const host = "skcet.ac.in";
 
 class GoogleAuth extends React.Component {
   componentDidMount() {
@@ -28,9 +28,14 @@ class GoogleAuth extends React.Component {
 
   onAuthChange = (isSignedIn) => {
     if (isSignedIn) {
-      this.username = window.gapi.auth2.getAuthInstance().currentUser.get().getBasicProfile().getEmail().split("@")[0];
-        // console.log(this.username);
-        this.props.login(this.username);
+      this.username = window.gapi.auth2
+        .getAuthInstance()
+        .currentUser.get()
+        .getBasicProfile()
+        .getEmail()
+        .split("@")[0];
+      // console.log(this.username);
+      this.props.login(this.username);
     } else {
       this.props.logout();
     }
@@ -38,13 +43,21 @@ class GoogleAuth extends React.Component {
 
   onSignInClick = () => {
     this.auth.signIn();
-    const domain = window.gapi.auth2.getAuthInstance().currentUser.get().getHostedDomain();
-    if(domain === host && !this.props.isSignedIn){
-        const gProfile = window.gapi.auth2.getAuthInstance().currentUser.get().getBasicProfile();
-        const name = gProfile.getName(), userType = gProfile.getGivenName().match(/^\d/) ? 1 : 2, username = gProfile.getEmail().split("@")[0];
-        console.log(name, userType, username);
-        this.props.register(name, userType, username);
-    }else{
+    const domain = window.gapi.auth2
+      .getAuthInstance()
+      .currentUser.get()
+      .getHostedDomain();
+    if (domain === host && !this.props.isSignedIn) {
+      const gProfile = window.gapi.auth2
+        .getAuthInstance()
+        .currentUser.get()
+        .getBasicProfile();
+      const name = gProfile.getName(),
+        userType = gProfile.getGivenName().match(/^\d/) ? 1 : 2,
+        username = gProfile.getEmail().split("@")[0];
+      console.log(name, userType, username);
+      this.props.register(name, userType, username);
+    } else {
       this.auth.signOut();
     }
   };
@@ -64,7 +77,7 @@ class GoogleAuth extends React.Component {
                 render={({ history }) => <SearchBox history={history} />}
               />
             </Nav>
-            <Nav className="ms-5">
+            <Nav className='ms-5'>
               <LinkContainer to='/'>
                 <Nav.Link>
                   <i className='fas fa-home'></i> Home
@@ -127,8 +140,12 @@ class GoogleAuth extends React.Component {
       );
     } else {
       return (
-        <Button onClick={this.onSignInClick} variant='danger' className="text-center">
-          <i className='fab fa-google-plus fa-2x me-3' />{' '}
+        <Button
+          onClick={this.onSignInClick}
+          variant='danger'
+          className='text-center'
+        >
+          <i className='fab fa-google-plus fa-2x me-3' />{" "}
           <span> Sign In with Google</span>
         </Button>
       );
@@ -144,4 +161,6 @@ const mapStateToProps = (state) => {
   return { isSignedIn: state.userLogin.userInfo };
 };
 
-export default connect(mapStateToProps, { login, logout, register })(GoogleAuth);
+export default connect(mapStateToProps, { login, logout, register })(
+  GoogleAuth
+);

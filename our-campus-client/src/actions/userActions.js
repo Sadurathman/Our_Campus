@@ -151,6 +151,7 @@ export const getUserDetails = (id) => async (dispatch, getState) => {
 };
 
 export const updateUserProfile = (user) => async (dispatch, getState) => {
+  console.log(user);
   try {
     dispatch({
       type: USER_UPDATE_PROFILE_REQUEST,
@@ -161,14 +162,12 @@ export const updateUserProfile = (user) => async (dispatch, getState) => {
     } = getState();
 
     user._id = userInfo._id;
-    console.log(user);
     const config = {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${userInfo.token}`,
       },
     };
-    console.log(config);
     const { data } = await axios.put(`/users/profile`, user, config);
 
     dispatch({

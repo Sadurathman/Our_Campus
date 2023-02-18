@@ -5,7 +5,8 @@ import Message from "../components/Message";
 import Loader from "../components/Loader";
 import { getUserDetails, updateUserProfile } from "../actions/userActions";
 import FormContainer from "../components/FormContainer";
-import axios from 'axios';
+import axios from "axios";
+import SkillModelForm from "../components/SkillModalForm";
 
 const ProfileEditScreen = ({ match, history }) => {
   const [name, setName] = useState("");
@@ -45,7 +46,16 @@ const ProfileEditScreen = ({ match, history }) => {
 
   const submitHandler = (e) => {
     e.preventDefault();
-    dispatch(updateUserProfile({ id: userInfo._id, name, userName, tagline, dp, about}));
+    dispatch(
+      updateUserProfile({
+        id: userInfo._id,
+        name,
+        userName,
+        tagline,
+        dp,
+        about,
+      })
+    );
   };
 
   const uploadFileHandler = async (e) => {
@@ -75,72 +85,71 @@ const ProfileEditScreen = ({ match, history }) => {
     <>
       <FormContainer>
         <h1>Edit Profile</h1>
-        {success && <Message variant="success">Profile Updated</Message>}
+        {success && <Message variant='success'>Profile Updated</Message>}
         {/* {loading && <Loader />} */}
-          <Form onSubmit={submitHandler}>
-            <Form.Group controlId="name">
-              <Form.Label>Name</Form.Label>
-              <Form.Control
-                type="name"
-                placeholder="Enter name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-              ></Form.Control>
-            </Form.Group>
+        <Form onSubmit={submitHandler}>
+          <Form.Group controlId='name'>
+            <Form.Label>Name</Form.Label>
+            <Form.Control
+              type='name'
+              placeholder='Enter name'
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            ></Form.Control>
+          </Form.Group>
 
-            <Form.Group controlId="tagline">
-              <Form.Label>Tagline</Form.Label>
-              <Form.Control
-                type="tagline"
-                placeholder="Enter tagline"
-                value={tagline}
-                onChange={(e) => setTagline(e.target.value)}
-              ></Form.Control>
-            </Form.Group>
+          <Form.Group controlId='tagline'>
+            <Form.Label>Tagline</Form.Label>
+            <Form.Control
+              type='tagline'
+              placeholder='Enter tagline'
+              value={tagline}
+              onChange={(e) => setTagline(e.target.value)}
+            ></Form.Control>
+          </Form.Group>
 
-            <Form.Group controlId="About">
-              <Form.Label>About</Form.Label>
-              <Form.Control
-                type="About"
-                placeholder="Enter About"
-                value={about}
-                onChange={(e) => setAbout(e.target.value)}
-              ></Form.Control>
-            </Form.Group>
+          <Form.Group controlId='About'>
+            <Form.Label>About</Form.Label>
+            <Form.Control
+              type='About'
+              placeholder='Enter About'
+              value={about}
+              onChange={(e) => setAbout(e.target.value)}
+            ></Form.Control>
+          </Form.Group>
 
-            <Form.Group controlId="userName">
-              <Form.Label>Username</Form.Label>
-              <Form.Control
-                disabled
-                type="userName"
-                placeholder="Enter UserName"
-                value={userName}
-                onChange={(e) => setUsername(e.target.value)}
-              ></Form.Control>
-            </Form.Group>
+          <Form.Group controlId='userName'>
+            <Form.Label>Username</Form.Label>
+            <Form.Control
+              disabled
+              type='userName'
+              placeholder='Enter UserName'
+              value={userName}
+              onChange={(e) => setUsername(e.target.value)}
+            ></Form.Control>
+          </Form.Group>
 
-            <Form.Group controlId="image">
-              <Form.Label>Display Picture</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Enter Image URL"
-                value={dp}
-                onChange={(e) => setDp(e.target.value)}
-              ></Form.Control>
-              <Form.File
-                id="image-file"
-                label="Choose File"
-                custom
-                onChange={uploadFileHandler}
-              ></Form.File>
-              {uploading && <Loader />}
-            </Form.Group>
-
-            <br/>
-            <Button type="submit" variant="primary">
-              Update
-            </Button>
-          </Form>
+          <Form.Group controlId='image'>
+            <Form.Label>Display Picture</Form.Label>
+            <Form.Control
+              type='text'
+              placeholder='Enter Image URL'
+              value={dp}
+              onChange={(e) => setDp(e.target.value)}
+            ></Form.Control>
+            <Form.File
+              id='image-file'
+              label='Choose File'
+              custom
+              onChange={uploadFileHandler}
+            ></Form.File>
+            {uploading && <Loader />}
+          </Form.Group>
+          <br />
+          <Button type='submit' variant='primary'>
+            Update
+          </Button>
+        </Form>
       </FormContainer>
     </>
   );
