@@ -13,6 +13,7 @@ import Feeds from "../components/Feeds";
 import Loader from "../components/Loader";
 import Message from "../components/Message";
 import Rating from "../components/Rating";
+import { skillsList } from "../constants/skills";
 
 // const profile = {
 //   username: "19EUCB045",
@@ -128,7 +129,6 @@ const ProfileScreen = ({ match, history }) => {
                     </Container>
                   </Col>
                   <Col className='offset-2 my-3 text-center' md={6}>
-                    <Row>{user.about}</Row>
                     <Row className='my-5'>
                       <Col>
                         <span>{user.posts && user.posts.length}</span>
@@ -192,7 +192,24 @@ const ProfileScreen = ({ match, history }) => {
                     {/* // onClick={()=> setModalShow(true)}  */}
                     {/* size='sm' variant="danger">+ Add Post</Button> */}
                     {/* </Row> */}
+                    <Container className='mt-4 pt-2'>
+                      <Row xs='auto'>
+                        <Col className='p-2 m-1 text-muted'>Skills : </Col>
+                        {user.skills.map((skill, idx) => (
+                          <Col
+                            key={idx}
+                            className='p-2 m-1 bg-light text-primary rounded-pill'
+                          >
+                            {skillsList[skill]}
+                          </Col>
+                        ))}
+                      </Row>
+                    </Container>
                   </Col>
+                </Row>
+                <Row xs='auto' className='px-4 mx-4 mt-4'>
+                  <Col className='text-muted'>About : </Col>
+                  {user.about}
                 </Row>
               </Container>
             </Card.Body>

@@ -34,7 +34,7 @@ class GoogleAuth extends React.Component {
         .getBasicProfile()
         .getEmail()
         .split("@")[0];
-      // console.log(this.username);
+      console.log(this.username);
       this.props.login(this.username);
     } else {
       this.props.logout();

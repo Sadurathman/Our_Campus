@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "../config/api";
 import {
   POST_LIST_FAIL,
   POST_LIST_SUCCESS,
@@ -29,27 +29,27 @@ import {
   POST_UNLIKE_FAIL,
 } from "../constants/postConstants";
 
-export const listPosts =
-  (keyword = "", pageNumber = "") =>
-  async (dispatch) => {
-    try {
-      dispatch({ type: POST_LIST_REQUEST });
-      const { data } = await axios.get(`/posts?keyword=${keyword}`);
+export const listPosts = (keyword = "", pageNumber = "") => async (
+  dispatch
+) => {
+  try {
+    dispatch({ type: POST_LIST_REQUEST });
+    const { data } = await axios.get(`/posts?keyword=${keyword}`);
 
-      dispatch({
-        type: POST_LIST_SUCCESS,
-        payload: data,
-      });
-    } catch (error) {
-      dispatch({
-        type: POST_LIST_FAIL,
-        payload:
-          error.response && error.response.data.message
-            ? error.response.data.message
-            : error.message,
-      });
-    }
-  };
+    dispatch({
+      type: POST_LIST_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: POST_LIST_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
 
 export const listPostDetails = (id) => async (dispatch) => {
   try {
@@ -168,43 +168,45 @@ export const updatePost = (post) => async (dispatch, getState) => {
   }
 };
 
-export const createPostReview =
-  (postId, review) => async (dispatch, getState) => {
-    try {
-      dispatch({
-        type: POST_CREATE_REVIEW_REQUEST,
-      });
+export const createPostReview = (postId, review) => async (
+  dispatch,
+  getState
+) => {
+  try {
+    dispatch({
+      type: POST_CREATE_REVIEW_REQUEST,
+    });
 
-      const {
-        userLogin: { userInfo },
-      } = getState();
+    const {
+      userLogin: { userInfo },
+    } = getState();
 
-      const userId = userInfo._id;
-      const username = userInfo.username;
+    const userId = userInfo._id;
+    const username = userInfo.username;
 
-      review = { ...review, userId, username };
+    review = { ...review, userId, username };
 
-      const config = {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${userInfo.token}`,
-        },
-      };
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
 
-      await axios.post(`/posts/${postId}/comments`, review, config);
-      dispatch({
-        type: POST_CREATE_REVIEW_SUCCESS,
-      });
-    } catch (error) {
-      dispatch({
-        type: POST_CREATE_REVIEW_FAIL,
-        payload:
-          error.response && error.response.data.message
-            ? error.response.data.message
-            : error.message,
-      });
-    }
-  };
+    await axios.post(`/posts/${postId}/comments`, review, config);
+    dispatch({
+      type: POST_CREATE_REVIEW_SUCCESS,
+    });
+  } catch (error) {
+    dispatch({
+      type: POST_CREATE_REVIEW_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
 
 export const listTopPosts = () => async (dispatch) => {
   try {

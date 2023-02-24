@@ -38,7 +38,8 @@ const MyChats = ({
     fetchChats();
   }, [fetchAgain]);
 
-  const handleSearch = async () => {
+  const handleSearch = async (e) => {
+    e.preventDefault();
     if (!keyword) {
       // toast.error("Please Provide username");
       return;
@@ -54,6 +55,7 @@ const MyChats = ({
     } catch (error) {
       console.error(error);
     }
+    setKeyword("");
   };
 
   const accessChat = async (userId) => {

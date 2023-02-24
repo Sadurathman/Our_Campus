@@ -7,6 +7,7 @@ import {
   recommendationSystem,
   recommendationForUser,
 } from "../recommender/index.js";
+import { initialize } from "../recommender/recommender.js";
 
 const getUserByIds = asyncHandler(async (userIds) => {
   const user = await User.find()
@@ -38,13 +39,15 @@ const refreshUsers = asyncHandler(async () => {
   const users = await User.find({});
   const posts = await Post.find({});
   const recommender = await recommendationSystem(users, posts);
+  // const { knnClassifier, cf } = initialize(users);
   users.forEach(async (user) => {
     user.home = [];
+    // recommendActivities(knnClassifier, cf, user);
     user.suggestions = await recommendationForUser(recommender, user);
+    console.log(user.username + " : " + user.suggestions);
     user.suggestions = await user.suggestions.filter(
       (u) => u !== user._id && !user.following.includes(u)
     );
-    // console.log(user.username + " : " + user.suggestions);
     // user.suggestions = await User.find({ _id: { $ne: user._id } }, { _id: 1 })
     //   .sort({ _id: -1 })
     //   .limit(5);

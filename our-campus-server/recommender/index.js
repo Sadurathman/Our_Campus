@@ -10,22 +10,34 @@ const recommendationSystem = async (users, posts) => {
   users.forEach((user) => {
     // idVsUsernameMapper[user._id] = user.username;
     // usernameVsIdMapper[user.username] = user._id;
-    user.following.forEach((follow) => {
-      const convertedData = {
-        namespace: "college",
-        person: user._id,
-        action: "follow",
-        thing: follow,
-        expires_at: "2050-06-06",
-      };
-      data.push(convertedData);
 
-      user.requested.forEach((request) => {
+    user.following.forEach((follow) => {
+      //   const convertedData = {
+      //     namespace: "college",
+      //     person: user._id,
+      //     action: "follow",
+      //     thing: follow,
+      //     expires_at: "2050-06-06",
+      //   };
+      //   data.push(convertedData);
+
+      //   user.requested.forEach((request) => {
+      //     const convertedData = {
+      //       namespace: "college",
+      //       person: user._id,
+      //       action: "request",
+      //       thing: request,
+      //       expires_at: "2050-06-06",
+      //     };
+      //     data.push(convertedData);
+      //   });
+
+      user.skills.forEach((skill) => {
         const convertedData = {
           namespace: "college",
-          person: user._id,
-          action: "request",
-          thing: request,
+          thing: user._id,
+          action: "skills",
+          person: skill,
           expires_at: "2050-06-06",
         };
         data.push(convertedData);
@@ -33,30 +45,30 @@ const recommendationSystem = async (users, posts) => {
     });
   });
 
-  posts.forEach((post) => {
-    post.likes.forEach((like) => {
-      const convertedData = {
-        namespace: "college",
-        person: like,
-        action: "likes",
-        thing: post._id,
-        expires_at: "2050-06-06",
-      };
-      data.push(convertedData);
-    });
-    post.comments.forEach((comment) => {
-      if (comment.name !== post.username) {
-        const convertedData = {
-          namespace: "college",
-          person: comment.user,
-          action: "comment",
-          thing: post._id,
-          expires_at: "2050-06-06",
-        };
-        data.push(convertedData);
-      }
-    });
-  });
+  // posts.forEach((post) => {
+  //   post.likes.forEach((like) => {
+  //     const convertedData = {
+  //       namespace: "college",
+  //       person: like,
+  //       action: "likes",
+  //       thing: post._id,
+  //       expires_at: "2050-06-06",
+  //     };
+  //     data.push(convertedData);
+  //   });
+  //   post.comments.forEach((comment) => {
+  //     if (comment.name !== post.username) {
+  //       const convertedData = {
+  //         namespace: "college",
+  //         person: comment.user,
+  //         action: "comment",
+  //         thing: post._id,
+  //         expires_at: "2050-06-06",
+  //       };
+  //       data.push(convertedData);
+  //     }
+  //   });
+  // });
 
   // console.log(data);
   return await recommenderInitialization(data, "college");
@@ -124,28 +136,35 @@ const val = {
 const recommendationForUser = async (recommender, user) => {
   // console.log("After");
   // console.log(recommender);
-  const suggestionsOnPeople = await recommender.recommendations_for_person(
+
+  const suggestionsOnPeople = await recommender.recommendations_for_thing(
     "college",
     user._id,
-    { actions: { request: 1, follow: 4 } }
+    { actions: { skills: 1 } }
   );
 
-  const suggestionsOnPosts = await recommender.recommendations_for_person(
-    "college",
-    user._id,
-    { actions: { likes: 2, comment: 4 } }
-  );
+  // const suggestionsOnPeople = await recommender.recommendations_for_person(
+  //   "college",
+  //   user._id,
+  //   { actions: { request: 1, follow: 4 } }
+  // );
+
+  // const suggestionsOnPosts = await recommender.recommendations_for_person(
+  //   "college",
+  //   user._id,
+  //   { actions: { likes: 2, comment: 4 } }
+  // );
   // console.log(
   //   "Recommender User : " +
-  //     (suggestions.neighbourhood
-  //       ? Object.keys(suggestions.neighbourhood)
-  //       : suggestions.neighbourhood)
+  //     (suggestionsOnPeople.neighbourhood
+  //       ? Object.keys(suggestionsOnPeople.neighbourhood)
+  //       : suggestionsOnPeople.neighbourhood)
   // );
   // console.log(
   //   "Suggestions for " +
   //     user.username +
   //     " : " +
-  //     JSON.stringify(suggestionsOnPosts, null, 2)
+  //     JSON.stringify(suggestionsOnPeople, null, 2)
   // );
 
   const suggestedusers = [];
@@ -153,7 +172,7 @@ const recommendationForUser = async (recommender, user) => {
     suggestedusers.push(sug.thing);
   });
 
-  // console.log("Id : " + suggestedusers);
+  // console.log(user._id + " : " + suggestedusers);
 
   return suggestedusers.length > 5
     ? suggestedusers.splice(0, 5)

@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "../config/api";
 import { config } from "dotenv";
 import { dispatch } from "rxjs/internal/observable/pairs";
 import {
@@ -28,27 +28,27 @@ import {
   EVENT_ENROLL_SUCCESS,
 } from "../constants/eventConstants";
 
-export const listEvents =
-  (keyword = "", pageNumber = "") =>
-  async (dispatch) => {
-    try {
-      dispatch({ type: EVENT_LIST_REQUEST });
-      const { data } = await axios.get(`/events?keyword=${keyword}`);
+export const listEvents = (keyword = "", pageNumber = "") => async (
+  dispatch
+) => {
+  try {
+    dispatch({ type: EVENT_LIST_REQUEST });
+    const { data } = await axios.get(`/events?keyword=${keyword}`);
 
-      dispatch({
-        type: EVENT_LIST_SUCCESS,
-        payload: data,
-      });
-    } catch (error) {
-      dispatch({
-        type: EVENT_LIST_FAIL,
-        payload:
-          error.response && error.response.data.message
-            ? error.response.data.message
-            : error.message,
-      });
-    }
-  };
+    dispatch({
+      type: EVENT_LIST_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: EVENT_LIST_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
 
 export const listEventtDetails = (id) => async (dispatch) => {
   try {
@@ -170,38 +170,40 @@ export const updateEvent = (event) => async (dispatch, getState) => {
   }
 };
 
-export const createEventReview =
-  (eventId, review) => async (dispatch, getState) => {
-    try {
-      dispatch({
-        type: EVENT_CREATE_REVIEW_REQUEST,
-      });
+export const createEventReview = (eventId, review) => async (
+  dispatch,
+  getState
+) => {
+  try {
+    dispatch({
+      type: EVENT_CREATE_REVIEW_REQUEST,
+    });
 
-      const {
-        userLogin: { userInfo },
-      } = getState();
+    const {
+      userLogin: { userInfo },
+    } = getState();
 
-      const config = {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${userInfo.token}`,
-        },
-      };
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
 
-      await axios.post(`/events/${eventId}/reviews`, review, config);
-      dispatch({
-        type: EVENT_CREATE_REVIEW_SUCCESS,
-      });
-    } catch (error) {
-      dispatch({
-        type: EVENT_CREATE_REVIEW_FAIL,
-        payload:
-          error.response && error.response.data.message
-            ? error.response.data.message
-            : error.message,
-      });
-    }
-  };
+    await axios.post(`/events/${eventId}/reviews`, review, config);
+    dispatch({
+      type: EVENT_CREATE_REVIEW_SUCCESS,
+    });
+  } catch (error) {
+    dispatch({
+      type: EVENT_CREATE_REVIEW_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
 
 export const listTopEvents = () => async (dispatch) => {
   try {

@@ -134,7 +134,10 @@ const ProfileSummary = ({ profile }) => {
                 + Add Event
               </Button>
             )}
-            <SkillModelForm user={profile} />
+            <SkillModelForm
+              user={profile}
+              openModel={profile && profile.skills && profile.skills.length < 1}
+            />
           </Row>
         </Card.Footer>
       </Card>

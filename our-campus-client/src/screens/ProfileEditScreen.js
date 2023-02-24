@@ -5,7 +5,7 @@ import Message from "../components/Message";
 import Loader from "../components/Loader";
 import { getUserDetails, updateUserProfile } from "../actions/userActions";
 import FormContainer from "../components/FormContainer";
-import axios from "axios";
+import axios from "../config/api";
 import SkillModelForm from "../components/SkillModalForm";
 
 const ProfileEditScreen = ({ match, history }) => {
@@ -60,20 +60,34 @@ const ProfileEditScreen = ({ match, history }) => {
 
   const uploadFileHandler = async (e) => {
     const file = e.target.files[0];
-    const formData = new FormData();
-    formData.append("image", file);
+    // const formData = new FormData();
+    // formData.append("image", file);
     setUploading(true);
 
+    const data = new FormData();
+    data.append("file", file);
+    data.append("upload_preset", "sk1xkp14");
+
     try {
-      const config = {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      };
+      // const config = {
+      //   headers: {
+      //     "Content-Type": "multipart/form-data",
+      //   },
+      // };
 
-      const { data } = await axios.post("/api/upload", formData, config);
+      // const { data } = await axios.post("/api/upload", formData, config);
 
-      setDp(data);
+      const res = await fetch(
+        `https://api.cloudinary.com/v1_1/dpscbesvf/image/upload`,
+        {
+          method: "POST",
+          body: data,
+        }
+      );
+      const img = await res.json();
+      // Post `img.secure_url` to your server and save to MongoDB
+
+      setDp(img.secure_url);
       setUploading(false);
     } catch (error) {
       console.error(error);

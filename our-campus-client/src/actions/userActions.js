@@ -40,7 +40,7 @@ import {
   USER_DEVELOPER_FAIL,
 } from "../constants/userConstants";
 
-import axios from "axios";
+import axios from "../config/api";
 
 export const login = (username) => async (dispatch) => {
   try {
