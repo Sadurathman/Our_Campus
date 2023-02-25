@@ -34,6 +34,8 @@ class GoogleAuth extends React.Component {
         .getBasicProfile()
         .getEmail()
         .split("@")[0];
+      console.log(this.username);
+      this.props.login(this.username);
 
       const domain = window.gapi.auth2
         .getAuthInstance()
@@ -49,9 +51,7 @@ class GoogleAuth extends React.Component {
           username = gProfile.getEmail().split("@")[0];
         console.log(name, userType, username);
         this.props.register(name, userType, username);
-      } else {
-        console.log(this.username);
-        this.props.login(this.username);
+        this.username = username;
       }
     } else {
       this.props.logout();
