@@ -35,24 +35,24 @@ class GoogleAuth extends React.Component {
         .getEmail()
         .split("@")[0];
       console.log(this.username);
-      this.props.login(this.username);
-
-      const domain = window.gapi.auth2
-        .getAuthInstance()
-        .currentUser.get()
-        .getHostedDomain();
-      if (domain === host && !this.props.isSignedIn) {
-        const gProfile = window.gapi.auth2
+      this.props.login(this.username).then(() => {
+        const domain = window.gapi.auth2
           .getAuthInstance()
           .currentUser.get()
-          .getBasicProfile();
-        const name = gProfile.getName(),
-          userType = gProfile.getGivenName().match(/^\d/) ? 1 : 2,
-          username = gProfile.getEmail().split("@")[0];
-        console.log(name, userType, username);
-        this.props.register(name, userType, username);
-        this.username = username;
-      }
+          .getHostedDomain();
+        if (domain === host && !this.props.isSignedIn) {
+          const gProfile = window.gapi.auth2
+            .getAuthInstance()
+            .currentUser.get()
+            .getBasicProfile();
+          const name = gProfile.getName(),
+            userType = gProfile.getGivenName().match(/^\d/) ? 1 : 2,
+            username = gProfile.getEmail().split("@")[0];
+          console.log(name, userType, username);
+          this.props.register(name, userType, username);
+          this.username = username;
+        }
+      });
     } else {
       this.props.logout();
     }
@@ -60,6 +60,7 @@ class GoogleAuth extends React.Component {
 
   onSignInClick = () => {
     this.auth.signIn();
+    console.log(this.props.isSignedIn);
   };
 
   onSignOutClick = () => {
