@@ -376,7 +376,7 @@ const requestUser = asyncHandler(async (req, res) => {
     friend.requests.push(user._id);
 
     let notification = {
-      url: user.username,
+      url: `/profile/${user.username}`,
       img: user.dp,
       msg: user.name + " has requested to follow you.",
     };

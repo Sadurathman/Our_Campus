@@ -106,10 +106,17 @@ class GoogleAuth extends React.Component {
               >
                 {this.props.isSignedIn.notifications &&
                 this.props.isSignedIn.notifications.length > 0 ? (
-                  this.props.isSignedIn.notifications.map((noti) => (
-                    <LinkContainer to={`/profile/${noti.url}`}>
+                  this.props.isSignedIn.notifications.reverse().map((noti) => (
+                    <LinkContainer to={noti.url}>
                       <NavDropdown.Item>
-                        <Image src={noti.img} /> {noti.msg}
+                        <p style={{ wordWrap: "break-word", width: "20vw" }}>
+                          <Image
+                            src={noti.img}
+                            style={{ width: "2vw", float: "left" }}
+                            roundedCircle
+                          />{" "}
+                          {noti.msg}
+                        </p>
                       </NavDropdown.Item>
                     </LinkContainer>
                   ))

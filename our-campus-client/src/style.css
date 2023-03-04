@@ -76,3 +76,11 @@ h1 {
   bottom: 0;
   top: 0px;
 }
+
+.dropdown-menu {
+  min-width: auto !important;
+}
+
+#navbarScrollingDropdown {
+  width: fit-content;
+}
