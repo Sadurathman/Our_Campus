@@ -367,8 +367,18 @@ const requestUser = asyncHandler(async (req, res) => {
   if (user && friend) {
     user.requested.push(friend._id);
     friend.requests.push(user._id);
+
+    let notification = {
+      url: user.username,
+      img: user.dp,
+      msg: user.name + " has requested to follow you.",
+    };
+
+    friend.notifications.push(notification);
+
     const updatedUser = await user.save();
     await friend.save();
+
     // console.log(updatedUser)
     res.status(201).json(updatedUser);
   } else {
@@ -392,6 +402,15 @@ const acceptUser = asyncHandler(async (req, res) => {
     user.followers.push(friend._id);
     friend.requested.remove(user._id);
     friend.following.push(user._id);
+
+    let notification = {
+      url: user.username,
+      img: user.dp,
+      msg: user.name + " has Accepted your follow request.",
+    };
+
+    friend.notifications.push(notification);
+
     // friend.home.push(user.posts);
     await user.save();
     await friend.save();

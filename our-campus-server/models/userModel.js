@@ -1,5 +1,11 @@
 import mongoose from "mongoose";
 
+const notificationSchema = mongoose.Schema({
+  img: { type: String, require: true },
+  url: { type: String, required: true },
+  msg: { type: String, required: true },
+});
+
 const userSchema = mongoose.Schema(
   {
     username: {
@@ -45,6 +51,7 @@ const userSchema = mongoose.Schema(
     posts: [{ type: mongoose.Schema.Types.ObjectId, ref: "Post" }],
     home: [{ type: mongoose.Schema.Types.ObjectId, ref: "Post" }],
     clubs: [{ type: mongoose.Schema.Types.ObjectId, ref: "Club" }],
+    notifications: [notificationSchema],
   },
   {
     timestamps: true,

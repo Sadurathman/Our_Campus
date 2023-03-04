@@ -44,7 +44,11 @@ const destroyData = async () => {
   try {
     await Event.deleteMany();
     await Post.deleteMany();
-    await User.deleteMany();
+    await User.deleteMany({
+      created_on: {
+        $gte: new Date(new Date().getTime() - 24 * 60 * 60 * 1000),
+      },
+    });
 
     console.log("Data Destroyed!");
     process.exit();

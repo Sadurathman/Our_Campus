@@ -11,6 +11,8 @@
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "data:import": "node our-campus-server/seeder",
     "data:destroy": "node our-campus-server/seeder -d",
+    "user:add": "node our-campus-server/userAdder",
+    "user:remove": "node our-campus-server/userAdder -d",
     "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix our-campus-client && npm run build --prefix our-campus-client"
   },
   "keywords": [
