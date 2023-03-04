@@ -84,6 +84,7 @@ const authUser = asyncHandler(async (req, res) => {
       following: user.following,
       requests: user.requests,
       requested: user.requested,
+      notifications: user.notifications,
       suggestions,
       joinedEvents: user.joinedEvents,
       hostedEvents: user.hostedEvents,
@@ -138,6 +139,7 @@ const registerUser = asyncHandler(async (req, res) => {
         following: user.following,
         requests: user.requests,
         requested: user.requested,
+        notifications: user.notifications,
         suggestions: user.suggestions,
         joinedEvents: user.joinedEvents,
         hostedEvents: user.hostedEvents,
@@ -176,6 +178,7 @@ const getUserProfile = asyncHandler(async (req, res) => {
       following: user.following,
       requests: user.requests,
       requested: user.requested,
+      notifications: user.notifications,
       suggestions: user.suggestions,
       joinedEvents: user.joinedEvents,
       hostedEvents: user.hostedEvents,
@@ -216,7 +219,8 @@ const updateUserProfile = asyncHandler(async (req, res) => {
       (user.hostedEvents = req.body.hostedEvents || user.hostedEvents),
       (user.posts = req.body.posts || user.posts),
       (user.home = req.body.home || user.home),
-      (user.clubs = req.body.clubs || user.clubs);
+      (user.clubs = req.body.clubs || user.clubs),
+      (user.notifications = req.body.notifications || user.notifications);
 
     const updatedUser = await user.save();
 
@@ -236,6 +240,7 @@ const updateUserProfile = asyncHandler(async (req, res) => {
       following: updatedUser.following,
       requests: updatedUser.requests,
       requested: updatedUser.requested,
+      notifications: user.notifications,
       suggestions: updatedUser.suggestions,
       joinedEvents: updatedUser.joinedEvents,
       hostedEvents: updatedUser.hostedEvents,
@@ -314,7 +319,8 @@ const updateUser = asyncHandler(async (req, res) => {
       (user.hostedEvents = req.body.hostedEvents || user.hostedEvents),
       (user.posts = req.body.posts || user.posts),
       (user.home = req.body.home || user.home),
-      (user.clubs = req.body.clubs || user.clubs);
+      (user.clubs = req.body.clubs || user.clubs),
+      (user.notifications = req.body.notifications || user.notifications);
 
     const updatedUser = await user.save();
 
@@ -334,6 +340,7 @@ const updateUser = asyncHandler(async (req, res) => {
       following: updatedUser.following,
       requests: updatedUser.requests,
       requested: updatedUser.requested,
+      notifications: updateUser.notifications,
       suggestions: updatedUser.suggestions,
       joinedEvents: updatedUser.joinedEvents,
       hostedEvents: updatedUser.hostedEvents,
@@ -404,7 +411,7 @@ const acceptUser = asyncHandler(async (req, res) => {
     friend.following.push(user._id);
 
     let notification = {
-      url: user.username,
+      url: `/profile/${user.username}`,
       img: user.dp,
       msg: user.name + " has Accepted your follow request.",
     };

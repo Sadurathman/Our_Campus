@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { Route } from "react-router-dom";
-import { Navbar, Nav, NavDropdown, Button } from "react-bootstrap";
+import { Navbar, Nav, NavDropdown, Button, Image } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 
 import SearchBox from "./SearchBox";
@@ -34,7 +34,7 @@ class GoogleAuth extends React.Component {
         .getBasicProfile()
         .getEmail()
         .split("@")[0];
-      console.log(this.username);
+      console.log(this.props.isSignedIn);
       this.props.login(this.username).then(() => {
         const domain = window.gapi.auth2
           .getAuthInstance()
@@ -99,6 +99,24 @@ class GoogleAuth extends React.Component {
                   <i className='fas fa-bell'></i> Notifications
                 </Nav.Link>
               </LinkContainer> */}
+              <NavDropdown
+                id='nav-dropdown-dark-example'
+                title='notifications'
+                menuVariant='dark'
+              >
+                {this.props.isSignedIn.notifications &&
+                this.props.isSignedIn.notifications.length > 0 ? (
+                  this.props.isSignedIn.notifications.map((noti) => (
+                    <LinkContainer to={`/profile/${noti.url}`}>
+                      <NavDropdown.Item>
+                        <Image src={noti.img} /> {noti.msg}
+                      </NavDropdown.Item>
+                    </LinkContainer>
+                  ))
+                ) : (
+                  <NavDropdown.Item>No Notifications Yet</NavDropdown.Item>
+                )}
+              </NavDropdown>
               <NavDropdown
                 id='nav-dropdown-dark-example'
                 title={`${this.username}`}
