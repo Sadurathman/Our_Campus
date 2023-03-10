@@ -11,6 +11,17 @@ const recommendationSystem = async (users, posts) => {
     // idVsUsernameMapper[user._id] = user.username;
     // usernameVsIdMapper[user.username] = user._id;
 
+    user.skills.forEach((skill) => {
+      const convertedData = {
+        namespace: "college",
+        thing: user._id,
+        action: "skills",
+        person: skill,
+        expires_at: "2050-06-06",
+      };
+      data.push(convertedData);
+    });
+
     user.following.forEach((follow) => {
       //   const convertedData = {
       //     namespace: "college",
@@ -20,7 +31,6 @@ const recommendationSystem = async (users, posts) => {
       //     expires_at: "2050-06-06",
       //   };
       //   data.push(convertedData);
-
       //   user.requested.forEach((request) => {
       //     const convertedData = {
       //       namespace: "college",
@@ -31,17 +41,6 @@ const recommendationSystem = async (users, posts) => {
       //     };
       //     data.push(convertedData);
       //   });
-
-      user.skills.forEach((skill) => {
-        const convertedData = {
-          namespace: "college",
-          thing: user._id,
-          action: "skills",
-          person: skill,
-          expires_at: "2050-06-06",
-        };
-        data.push(convertedData);
-      });
     });
   });
 

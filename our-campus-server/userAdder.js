@@ -2814,7 +2814,7 @@ const importData = async () => {
     console.log(names.length);
 
     console.log(users[1199].username);
-    // const createdUsers = await User.insertMany(users);
+    const createdUsers = await User.insertMany(users);
 
     console.log("Data Imported!");
     process.exit();
