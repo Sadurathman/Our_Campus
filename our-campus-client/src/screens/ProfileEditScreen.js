@@ -87,7 +87,14 @@ const ProfileEditScreen = ({ match, history }) => {
       const img = await res.json();
       // Post `img.secure_url` to your server and save to MongoDB
 
-      setDp(img.secure_url);
+      const imgUrl = await img.secure_url;
+      setDp(
+        imgUrl.replace(
+          "dpscbesvf/image/upload",
+          "dpscbesvf/image/upload/ar_1:1,c_thumb,z_0.75"
+        )
+      );
+
       setUploading(false);
     } catch (error) {
       console.error(error);
@@ -129,6 +136,7 @@ const ProfileEditScreen = ({ match, history }) => {
               placeholder='Enter About'
               value={about}
               onChange={(e) => setAbout(e.target.value)}
+              as='textarea'
             ></Form.Control>
           </Form.Group>
 

@@ -90,7 +90,14 @@ const AddPostScreen = ({ hide }) => {
       const img = await res.json();
       // Post `img.secure_url` to your server and save to MongoDB
 
-      setImage(img.secure_url);
+      const imgUrl = await img.secure_url;
+      setImage(
+        imgUrl.replace(
+          "dpscbesvf/image/upload",
+          "dpscbesvf/image/upload/ar_1:1,z_0.75"
+        )
+      );
+
       setUploading(false);
     } catch (error) {
       console.error(error);
