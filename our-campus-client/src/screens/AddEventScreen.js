@@ -85,7 +85,7 @@ const AddPostScreen = ({ match, history }) => {
       setImage(
         imgUrl.replace(
           "dpscbesvf/image/upload",
-          "dpscbesvf/image/upload/ar_1:1,z_0.75"
+          "dpscbesvf/image/upload/ar_1:1,c_thumb,z_0.75"
         )
       );
 
