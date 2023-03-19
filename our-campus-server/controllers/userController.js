@@ -9,6 +9,8 @@ import {
 } from "../recommender/index.js";
 import { initialize } from "../recommender/recommender.js";
 
+let recommender = null;
+
 const getUserByIds = asyncHandler(async (userIds) => {
   const user = await User.find()
     .where("_id")
@@ -38,10 +40,10 @@ const developerUsers = asyncHandler(async (req, res) => {
 const refreshUsers = asyncHandler(async () => {
   const users = await User.find({});
   const posts = await Post.find({});
-  const recommender = await recommendationSystem(users, posts);
+  recommender = await recommendationSystem(users, posts);
   // const { knnClassifier, cf } = initialize(users);
   users.forEach(async (user) => {
-    user.home = [];
+    // user.home = [];
     // recommendActivities(knnClassifier, cf, user);
     user.suggestions = await recommendationForUser(recommender, user);
     console.log(user.username + " : " + user.suggestions);
@@ -66,7 +68,10 @@ const authUser = asyncHandler(async (req, res) => {
   if (user) {
     const home = await getPostUsingId(user.home);
     const posts = await getPostUsingId(user.posts);
-    const suggestions = await getUserByIds(user.suggestions);
+
+    const suggestions = await getUserByIds(
+      await recommendationForUser(recommender, user)
+    );
 
     res.json({
       _id: user._id,
@@ -121,6 +126,8 @@ const registerUser = asyncHandler(async (req, res) => {
       rating: 2.5,
       respect: 0,
     });
+
+    user.suggestions = await recommendationForUser(recommender, user);
 
     if (user) {
       res.status(201).json({

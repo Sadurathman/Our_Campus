@@ -195,14 +195,18 @@ const ProfileScreen = ({ match, history }) => {
                     <Container className='mt-4 pt-2'>
                       <Row xs='auto'>
                         <Col className='p-2 m-1 text-muted'>Skills : </Col>
-                        {user.skills.map((skill, idx) => (
-                          <Col
-                            key={idx}
-                            className='p-2 m-1 bg-light text-primary rounded-pill'
-                          >
-                            {skillsList[skill]}
-                          </Col>
-                        ))}
+                        {user.skills ? (
+                          user.skills.map((skill, idx) => (
+                            <Col
+                              key={idx}
+                              className='p-2 m-1 bg-light text-primary rounded-pill'
+                            >
+                              {skillsList[skill]}
+                            </Col>
+                          ))
+                        ) : (
+                          <p>Not yet Added</p>
+                        )}
                       </Row>
                     </Container>
                   </Col>
@@ -216,12 +220,13 @@ const ProfileScreen = ({ match, history }) => {
           </Card>
           <Row>
             <Col className='offset-2' md={8}>
-              {(user.followers && user.followers.includes(userInfo._id)) ||
+              {/* {(user.followers && user.followers.includes(userInfo._id)) ||
               user._id === userInfo._id ? (
                 <Feeds posts={user.posts} />
               ) : (
                 <Message variant='danger'>Private Account</Message>
-              )}
+              )} */}
+              <Feeds posts={user.posts} />
             </Col>
           </Row>
         </>
