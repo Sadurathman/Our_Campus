@@ -64,9 +64,11 @@ const ProfileScreen = ({ match, history }) => {
 
   return (
     <Container>
-      {loading && <Loader />}
-      {error && <Message variant='danger'>{error}</Message>}
-      {user ? (
+      {loading ? (
+        <Loader />
+      ) : error ? (
+        <Message variant='danger'>{error}</Message>
+      ) : user ? (
         <>
           {user &&
             user.requested &&

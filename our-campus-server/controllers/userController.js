@@ -9,8 +9,6 @@ import {
 } from "../recommender/index.js";
 import { initialize } from "../recommender/recommender.js";
 
-let recommender = null;
-
 const getUserByIds = asyncHandler(async (userIds) => {
   const user = await User.find()
     .where("_id")
@@ -40,7 +38,7 @@ const developerUsers = asyncHandler(async (req, res) => {
 const refreshUsers = asyncHandler(async () => {
   const users = await User.find({});
   const posts = await Post.find({});
-  recommender = await recommendationSystem(users, posts);
+  const recommender = await recommendationSystem(users, posts);
   // const { knnClassifier, cf } = initialize(users);
   users.forEach(async (user) => {
     // user.home = [];
@@ -69,9 +67,7 @@ const authUser = asyncHandler(async (req, res) => {
     const home = await getPostUsingId(user.home);
     const posts = await getPostUsingId(user.posts);
 
-    const suggestions = await getUserByIds(
-      await recommendationForUser(recommender, user)
-    );
+    const suggestions = await getUserByIds(user.suggestions);
 
     res.json({
       _id: user._id,
@@ -127,7 +123,7 @@ const registerUser = asyncHandler(async (req, res) => {
       respect: 0,
     });
 
-    user.suggestions = await recommendationForUser(recommender, user);
+    // user.suggestions = await recommendationForUser(recommender, user);
 
     if (user) {
       res.status(201).json({
